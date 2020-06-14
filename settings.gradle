@@ -1,0 +1,6 @@
+rootProject.name = 'Vothemis'
+include 'CommonLib'
+include 'External'
+include 'Infra'
+include 'Model'
+include 'UseCase'

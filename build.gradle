@@ -1,0 +1,71 @@
+buildscript {
+    ext {
+        kotlin_version = '1.3.72'
+        junit_jupiter_version = '5.3.1'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
+    }
+}
+
+allprojects {
+    group 'sh.awtk'
+    version '1.0-SNAPSHOT'
+}
+
+subprojects {
+    apply plugin: 'org.junit.platform.gradle.plugin'
+    apply plugin: 'kotlin'
+
+    ext {
+        ktor_version = '1.3.1'
+        kotlinx_version = '1.3.7'
+        logback_version = '1.2.1'
+    }
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        maven { url 'https://dl.bintray.com/kotlin/kotlinx' }
+        maven { url "http://kotlin.bintray.com/ktor" }
+    }
+
+    compileKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+        // This option is to workaround compile error when function name contains parentheses
+        kotlinOptions {
+            freeCompilerArgs += ["-Xsanitize-parentheses"]
+        }
+    }
+
+    dependencies {
+        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+        compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7"
+        compile "ch.qos.logback:logback-classic:1.2.1"
+
+        compile "com.zaxxer:HikariCP:3.1.0"
+        compile "joda-time:joda-time:2.9.4"
+
+        testCompile("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
+        testCompile("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
+        testRuntime("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")
+        testCompile("org.assertj:assertj-core:3.11.1")
+        testImplementation("io.mockk:mockk:1.9")
+    }
+
+    test {
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+    }
+}
+
+
