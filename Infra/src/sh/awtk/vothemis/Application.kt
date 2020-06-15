@@ -1,10 +1,12 @@
-package sh.awtk
+package sh.awtk.vothemis
 
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.application.log
 import io.ktor.auth.Authentication
+import io.ktor.auth.authenticate
+import io.ktor.auth.jwt.jwt
 import io.ktor.features.CORS
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.StatusPages
@@ -16,6 +18,7 @@ import io.ktor.locations.Locations
 import io.ktor.response.respond
 import io.ktor.routing.routing
 import sh.awtk.vothemis.exception.HttpException
+import sh.awtk.vothemis.routes.RoutesV1
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -23,8 +26,7 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
 
-    install(Locations) {
-    }
+    install(Locations)
 
     install(CORS) {
         method(HttpMethod.Options)
@@ -37,6 +39,7 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(Authentication) {
+        jwt { }
     }
 
     install(ContentNegotiation) {
@@ -56,10 +59,12 @@ fun Application.module(testing: Boolean = false) {
             }
         }
 
-        Routes().apply {
-            Question()
-            User()
-            Login()
+        RoutesV1().apply {
+            authenticate {
+                this@routing.installQuestion()
+                this@routing.installUser()
+            }
+            installLogin()
         }
     }
 }
