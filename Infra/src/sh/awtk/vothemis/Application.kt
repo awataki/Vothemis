@@ -28,34 +28,11 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 fun Application.module(testing: Boolean = false) {
 
     install(Locations)
-
     installAuthentication()
+    installContentNegotiation()
+    installStatusPages()
+    installCORS()
 
-    install(ContentNegotiation) {
-        gson()
-    }
-
-    install(StatusPages) {
-        exception<HttpException> { e ->
-            log.info(e.errMessage)
-            call.respond(HttpStatusCode.fromValue(e.code))
-        }
-        exception<Throwable> { e ->
-            log.info(e.toString())
-            call.respond(HttpStatusCode.InternalServerError)
-        }
-    }
-
-    install(CORS) {
-        method(HttpMethod.Get)
-        method(HttpMethod.Post)
-        method(HttpMethod.Put)
-        method(HttpMethod.Delete)
-        method(HttpMethod.Options)
-        anyHost()
-        header("Authorization")
-        allowCredentials = false
-    }
     routing {
         v1Route()
     }
@@ -82,4 +59,34 @@ private fun Application.installAuthentication() {
     }
 }
 
+private fun Application.installContentNegotiation() {
+    install(ContentNegotiation) {
+        gson()
+    }
+}
 
+private fun Application.installStatusPages() {
+    install(StatusPages) {
+        exception<HttpException> { e ->
+            log.info(e.errMessage)
+            call.respond(HttpStatusCode.fromValue(e.code))
+        }
+        exception<Throwable> { e ->
+            log.info(e.toString())
+            call.respond(HttpStatusCode.InternalServerError)
+        }
+    }
+}
+
+private fun Application.installCORS() {
+    install(CORS) {
+        method(HttpMethod.Get)
+        method(HttpMethod.Post)
+        method(HttpMethod.Put)
+        method(HttpMethod.Delete)
+        method(HttpMethod.Options)
+        anyHost()
+        header("Authorization")
+        allowCredentials = false
+    }
+}
