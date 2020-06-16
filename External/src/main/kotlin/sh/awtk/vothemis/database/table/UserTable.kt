@@ -18,4 +18,5 @@ class UserEntity(id: EntityID<Long>) : LongEntity(id) {
     var name by UserTable.userName
     var hash by UserTable.hash
     var bio by UserTable.bio
+    val questions by QuestionEntity referrersOn QuestionTable.createdBy
 }
