@@ -13,7 +13,7 @@ object DatabaseFactory {
     lateinit var dbDriver: String
     var maxPoolSize by Delegates.notNull<Int>()
     var isAutoCommit by Delegates.notNull<Boolean>()
-    lateinit var transactionIsolation:String
+    lateinit var transactionIsolation: String
 
     fun init() {
         Database.connect(hikariCP())
