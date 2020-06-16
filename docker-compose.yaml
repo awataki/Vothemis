@@ -1,0 +1,19 @@
+version: '2'
+services:
+
+  # SQL database
+  postgres:
+    image: "postgres:9.6.0"
+    restart: "always"
+    volumes:
+      - "vothemis-data:/var/lib/postgresql/data"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "testuser"
+      POSTGRES_PASSWORD: "testuser"
+      POSTGRES_DB: "vothemis"
+    mem_limit: "8g"
+
+volumes:
+  vothemis-data:

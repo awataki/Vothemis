@@ -31,7 +31,7 @@ subprojects {
 
     repositories {
         mavenCentral()
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        maven { url 'https://dl.bintray.com/kotlin' }
         maven { url 'https://dl.bintray.com/kotlin/kotlinx' }
         maven { url "http://kotlin.bintray.com/ktor" }
     }

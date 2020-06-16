@@ -1,5 +1,6 @@
 package sh.awtk.vothemis
 
+import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -12,11 +13,13 @@ import io.ktor.features.StatusPages
 import io.ktor.gson.gson
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
+import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Locations
 import io.ktor.response.respond
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
 import org.koin.ktor.ext.Koin
+import sh.awtk.vothemis.database.DatabaseFactory
 import sh.awtk.vothemis.exception.HttpException
 import sh.awtk.vothemis.jwt.JWTFactory
 import sh.awtk.vothemis.principal.LoginUser
@@ -24,9 +27,14 @@ import sh.awtk.vothemis.routes.v1Route
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
+@KtorExperimentalLocationsAPI
+@KtorExperimentalAPI
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
+
+    setupDB()
+    setupJWT()
 
     install(Locations)
     installAuthentication()
@@ -41,12 +49,35 @@ fun Application.module(testing: Boolean = false) {
 }
 
 @KtorExperimentalAPI
+private fun Application.setupDB() {
+    DatabaseFactory.also {
+        it.dbUrl = requireNotNull(environment.config.property("vothemis.db.jdbcUrl").getString())
+        it.dbUser = requireNotNull(environment.config.property("vothemis.db.username").getString())
+        it.dbPassword = requireNotNull(environment.config.property("vothemis.db.password").getString())
+        it.dbDriver = requireNotNull(environment.config.property("vothemis.db.driverClassName").getString())
+        it.maxPoolSize = requireNotNull(environment.config.property("vothemis.db.maximumPoolSize").getString().toInt())
+        it.isAutoCommit =
+            requireNotNull(environment.config.property("vothemis.db.isAutoCommit").getString().toBoolean())
+        it.transactionIsolation =
+            requireNotNull(environment.config.property("vothemis.db.transactionIsolation").getString())
+    }
+    DatabaseFactory.init()
+}
+
+@KtorExperimentalAPI
+private fun Application.setupJWT() {
+    JWTFactory.also {
+        it.algorithm = Algorithm.HMAC512(requireNotNull(environment.config.property("vothemis.jwt.secret").getString()))
+        it.issuer = requireNotNull(environment.config.property("vothemis.jwt.issuer").getString())
+        it.audience = requireNotNull(environment.config.property("vothemis.jwt.audience").getString())
+    }
+
+    JWTFactory.init()
+}
+
+@KtorExperimentalAPI
 private fun Application.installAuthentication() {
-    val jwtSecret = requireNotNull(environment.config.property("vothemis.jwt.secret").getString())
-    val jwtIssuer = requireNotNull(environment.config.property("vothemis.jwt.issuer").getString())
-    val jwtAudience = requireNotNull(environment.config.property("vothemis.jwt.audience").getString())
     val jwtRealm = requireNotNull(environment.config.property("vothemis.jwt.realm").getString())
-    JWTFactory.init(jwtSecret, jwtIssuer, jwtAudience)
 
     install(Authentication) {
         jwt {
@@ -93,7 +124,7 @@ private fun Application.installCORS() {
     }
 }
 
-private fun Application.installKoin(){
-    install(Koin){
+private fun Application.installKoin() {
+    install(Koin) {
     }
 }
