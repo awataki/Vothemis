@@ -16,6 +16,7 @@ import io.ktor.locations.Locations
 import io.ktor.response.respond
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
+import org.koin.ktor.ext.Koin
 import sh.awtk.vothemis.exception.HttpException
 import sh.awtk.vothemis.jwt.JWTFactory
 import sh.awtk.vothemis.principal.LoginUser
@@ -32,6 +33,7 @@ fun Application.module(testing: Boolean = false) {
     installContentNegotiation()
     installStatusPages()
     installCORS()
+    installKoin()
 
     routing {
         v1Route()
@@ -88,5 +90,10 @@ private fun Application.installCORS() {
         anyHost()
         header("Authorization")
         allowCredentials = false
+    }
+}
+
+private fun Application.installKoin(){
+    install(Koin){
     }
 }
