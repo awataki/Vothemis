@@ -16,6 +16,7 @@ import sh.awtk.vothemis.viewmodel.UserRequest
 import sh.awtk.vothemis.viewmodel.VotingRequest
 
 
+@KtorExperimentalLocationsAPI
 fun Routing.v1Route() {
     route("v1") {
         loginRoute()
@@ -29,6 +30,7 @@ fun Routing.v1Route() {
 /**
  * Question
  */
+@KtorExperimentalLocationsAPI
 private fun Route.questionRoute() {
     @Location("/question/{id}")
     data class SpecificQuestionLocation(val id: Long)
@@ -70,6 +72,7 @@ private fun Route.questionRoute() {
 /**
  * User
  */
+@KtorExperimentalLocationsAPI
 private fun Route.userRoute() {
     val presenter: UserPresenter by inject()
 
