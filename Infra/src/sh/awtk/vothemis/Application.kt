@@ -18,14 +18,9 @@ import io.ktor.locations.Locations
 import io.ktor.response.respond
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.ktor.ext.Koin
 import sh.awtk.vothemis.exception.HttpException
 import sh.awtk.vothemis.exposed.DatabaseFactory
-import sh.awtk.vothemis.exposed.table.CandidateTable
-import sh.awtk.vothemis.exposed.table.QuestionTable
-import sh.awtk.vothemis.exposed.table.UserTable
 import sh.awtk.vothemis.jwt.JWTFactory
 import sh.awtk.vothemis.module.UserModule
 import sh.awtk.vothemis.principal.LoginUser
