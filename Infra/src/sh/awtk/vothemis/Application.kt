@@ -19,6 +19,7 @@ import io.ktor.response.respond
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
 import org.koin.ktor.ext.Koin
+import org.koin.logger.slf4jLogger
 import sh.awtk.vothemis.exception.HttpException
 import sh.awtk.vothemis.exposed.DatabaseFactory
 import sh.awtk.vothemis.jwt.JWTFactory
@@ -126,6 +127,7 @@ private fun Application.installCORS() {
 
 private fun Application.installKoin() {
     install(Koin) {
+        slf4jLogger()
         modules(
             UserModule().module()
         )
