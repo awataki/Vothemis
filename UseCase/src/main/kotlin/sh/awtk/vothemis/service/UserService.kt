@@ -35,8 +35,8 @@ class UserService(
         user.also {
             if (it.name.value.isBlank()) throw BadRequestException("user.name is blank")
             if (it.password.value.isBlank()) it.password =
-                userRepo.findBy(it.id)?.password ?: throw NullPointerException()
-            it.password = UserPass(BCryptFactory.genBCryptHash(it.password.value))
+                userRepo.findBy(it.id)?.password ?: throw ObjectNotFoundExcepiton("find user fail ${it.id.value}")
+            else it.password = UserPass(BCryptFactory.genBCryptHash(it.password.value))
         }
         return transaction.run {
             userRepo.update(user)?.value
