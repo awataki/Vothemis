@@ -18,12 +18,21 @@ import io.ktor.locations.Locations
 import io.ktor.response.respond
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
+import org.koin.experimental.builder.single
+import org.koin.experimental.builder.singleBy
 import org.koin.ktor.ext.Koin
 import sh.awtk.vothemis.exception.HttpException
 import sh.awtk.vothemis.exposed.DatabaseFactory
+import sh.awtk.vothemis.exposed.repository.TransactionImpl
+import sh.awtk.vothemis.exposed.repository.UserRepositoryImpl
+import sh.awtk.vothemis.interfaces.repository.ITransaction
+import sh.awtk.vothemis.interfaces.repository.IUserRepository
+import sh.awtk.vothemis.interfaces.service.IUserService
 import sh.awtk.vothemis.jwt.JWTFactory
+import sh.awtk.vothemis.presenter.UserPresenter
 import sh.awtk.vothemis.principal.LoginUser
 import sh.awtk.vothemis.routes.v1Route
+import sh.awtk.vothemis.service.UserService
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -126,5 +135,14 @@ private fun Application.installCORS() {
 
 private fun Application.installKoin() {
     install(Koin) {
+        org.koin.dsl.module {
+            // presenter
+            single<UserPresenter>()
+            //Service
+            singleBy<IUserService, UserService>()
+            //Repository
+            singleBy<ITransaction, TransactionImpl>()
+            singleBy<IUserRepository, UserRepositoryImpl>()
+        }
     }
 }

@@ -16,17 +16,17 @@ class TransactionImpl : ITransaction {
         dispatcher = Executors.newFixedThreadPool(DatabaseFactory.maxPoolSize).asCoroutineDispatcher()
     }
 
-    override suspend fun <T> run(block: () -> T): T =
+    override suspend fun <T> run(codeBlock: () -> T): T =
         withContext(dispatcher) {
             transaction {
-                block()
+                codeBlock()
             }
         }
 
-    override suspend fun <T> suspendRun(block: suspend () -> T): T =
+    override suspend fun <T> suspendRun(codeBlock: suspend () -> T): T =
         withContext(dispatcher) {
             newSuspendedTransaction {
-                block()
+                codeBlock()
             }
         }
 }

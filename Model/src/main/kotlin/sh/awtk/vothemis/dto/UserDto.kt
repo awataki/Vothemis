@@ -9,7 +9,7 @@ import sh.awtk.vothemis.vo.UserName
 data class UserDto(
     val id: UserId,
     val name: UserName,
-    val password: UserPass,
+    var password: UserPass,
     val bio: UserBio
 )
 

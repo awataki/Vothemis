@@ -1,5 +1,7 @@
 package sh.awtk.vothemis.service
 
+import UserPass
+import sh.awtk.vothemis.bcrypt.BCryptFactory
 import sh.awtk.vothemis.dto.UserDto
 import sh.awtk.vothemis.exception.BadRequestException
 import sh.awtk.vothemis.exception.ObjectNotFoundExcepiton
@@ -14,12 +16,9 @@ class UserService(
 ) : IUserService {
     override suspend fun createNewUser(user: UserDto): UserDto {
         user.also {
-            if (it.name.value.isBlank()) {
-                throw BadRequestException("user.name is blank")
-            }
-            if (it.password.value.isBlank()) {
-                throw BadRequestException("user.pass is blank")
-            }
+            if (it.name.value.isBlank()) throw BadRequestException("user.name is blank")
+            if (it.password.value.isBlank()) throw BadRequestException("user.pass is blank")
+            it.password = UserPass(BCryptFactory.genBCryptHash(it.password.value))
         }
         return transaction.suspendRun {
             userRepo.create(user)
@@ -33,6 +32,12 @@ class UserService(
     }
 
     override suspend fun updateUserData(user: UserDto): UserDto {
+        user.also {
+            if (it.name.value.isBlank()) throw BadRequestException("user.name is blank")
+            if (it.password.value.isBlank()) it.password =
+                userRepo.findBy(it.id)?.password ?: throw NullPointerException()
+            it.password = UserPass(BCryptFactory.genBCryptHash(it.password.value))
+        }
         return transaction.run {
             userRepo.update(user)?.value
             userRepo.findBy(user.id)
