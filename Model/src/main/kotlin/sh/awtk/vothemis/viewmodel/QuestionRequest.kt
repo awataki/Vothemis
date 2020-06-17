@@ -2,11 +2,10 @@ package sh.awtk.vothemis.viewmodel
 
 import java.util.*
 
-data class Question(
+data class QuestionRequest(
     val id: Long,
     val title: String,
     val sentence: String,
-    val avaliable_candidate: List<Candidate>,
-    val until: Date,
-    val created_by: User
+    val available_candidate: List<Candidate>,
+    val until: Date
 )

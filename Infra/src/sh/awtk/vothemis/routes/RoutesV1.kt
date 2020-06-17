@@ -6,9 +6,9 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.*
-import sh.awtk.vothemis.viewmodel.Question
-import sh.awtk.vothemis.viewmodel.User
-import sh.awtk.vothemis.viewmodel.Voting
+import sh.awtk.vothemis.viewmodel.QuestionRequest
+import sh.awtk.vothemis.viewmodel.UserRequest
+import sh.awtk.vothemis.viewmodel.VotingRequest
 
 
 fun Routing.v1Route() {
@@ -30,7 +30,7 @@ private fun Route.questionRoute() {
 
     // Create new question
     post("/question") {
-        val body = call.receive<Question>()
+        val body = call.receive<QuestionRequest>()
         call.respond(Unit)
     }
 
@@ -41,7 +41,7 @@ private fun Route.questionRoute() {
 
     // Update specific question by ID
     put<SpecificQuestionLocation> {
-        val body = call.receive<Question>()
+        val body = call.receive<QuestionRequest>()
         call.respond(Unit)
     }
 
@@ -52,7 +52,7 @@ private fun Route.questionRoute() {
 
     // Voting to question
     post<SpecificQuestionLocation> {
-        val body = call.receive<Voting>()
+        val body = call.receive<VotingRequest>()
         call.respond(Unit)
     }
 
@@ -71,7 +71,7 @@ private fun Route.userRoute() {
 
     // Create new User
     post("/user/create") {
-        val body = call.receive<User>()
+        val body = call.receive<UserRequest>()
         call.respond(Unit)
     }
 
@@ -82,7 +82,7 @@ private fun Route.userRoute() {
 
     // Update own user data
     put<SpecificUserLocation> {
-        val body = call.receive<User>()
+        val body = call.receive<UserRequest>()
         call.respond(Unit)
     }
 
@@ -95,7 +95,7 @@ private fun Route.loginRoute() {
 
     // Login
     post("/login") {
-        val body = call.receive<User>()
+        val body = call.receive<UserRequest>()
         call.respond(Unit)
     }
 }
