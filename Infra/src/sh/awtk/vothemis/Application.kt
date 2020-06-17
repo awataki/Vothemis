@@ -31,8 +31,7 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @KtorExperimentalLocationsAPI
 @KtorExperimentalAPI
 @Suppress("unused") // Referenced in application.conf
-@kotlin.jvm.JvmOverloads
-fun Application.module(testing: Boolean = false) {
+fun Application.module() {
 
     setupDB()
     setupJWT()
