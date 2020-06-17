@@ -13,7 +13,7 @@ class UserRepositoryImpl : IUserRepository {
     }.toDto()
 
 
-    override fun findBy(id: Long): UserDto? = UserEntity.findById(id)?.toDto()
+    override fun findBy(id: UserId): UserDto? = UserEntity.findById(id.value)?.toDto()
 
 
     override fun findAll(): List<UserDto>? = UserEntity.all().map { it.toDto() }

@@ -1,6 +1,7 @@
 package sh.awtk.vothemis.service
 
 import sh.awtk.vothemis.dto.UserDto
+import sh.awtk.vothemis.exception.BadRequestException
 import sh.awtk.vothemis.exception.ObjectNotFoundExcepiton
 import sh.awtk.vothemis.interfaces.repository.ITransaction
 import sh.awtk.vothemis.interfaces.repository.IUserRepository
@@ -11,20 +12,36 @@ class UserService(
     private val userRepo: IUserRepository,
     private val transaction: ITransaction
 ) : IUserService {
-    override suspend fun createNewUser(user: UserDto): UserDto = transaction.suspendRun {
-        userRepo.create(user)
-
+    override suspend fun createNewUser(user: UserDto): UserDto {
+        user.also {
+            if (it.name.value.isBlank()) {
+                throw BadRequestException("user.name is blank")
+            }
+            if (it.password.value.isBlank()) {
+                throw BadRequestException("user.pass is blank")
+            }
+        }
+        return transaction.suspendRun {
+            userRepo.create(user)
+        }
     }
 
-    override suspend fun getSpecificUser(id: UserId): UserDto = transaction.run {
-        userRepo.findBy(id.value)
-    } ?: throw ObjectNotFoundExcepiton("find user fail $id")
+    override suspend fun getSpecificUser(id: UserId): UserDto {
+        return transaction.run {
+            userRepo.findBy(id)
+        } ?: throw ObjectNotFoundExcepiton("find user fail $id")
+    }
 
-    override suspend fun updateUserData(user: UserDto): UserId = transaction.run {
-        userRepo.update(user)
-    } ?: throw ObjectNotFoundExcepiton("find user fail ${user.id.value}")
+    override suspend fun updateUserData(user: UserDto): UserDto {
+        return transaction.run {
+            userRepo.update(user)?.value
+            userRepo.findBy(user.id)
+        } ?: throw ObjectNotFoundExcepiton("find user fail ${user.id.value}")
+    }
 
-    override suspend fun deleteUser(id: UserId): Unit? = transaction.run {
-        userRepo.delete(id.value)
-    } ?: throw ObjectNotFoundExcepiton("find user fail $id")
+    override suspend fun deleteUser(id: UserId): Unit? {
+        return transaction.run {
+            userRepo.delete(id.value)
+        } ?: throw ObjectNotFoundExcepiton("find user fail $id")
+    }
 }

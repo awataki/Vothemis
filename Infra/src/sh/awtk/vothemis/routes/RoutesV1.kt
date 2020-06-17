@@ -2,10 +2,15 @@ package sh.awtk.vothemis.routes
 
 import io.ktor.application.call
 import io.ktor.auth.authenticate
+import io.ktor.auth.principal
 import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.*
+import org.koin.ktor.ext.inject
+import sh.awtk.vothemis.exception.ForbiddenException
+import sh.awtk.vothemis.presenter.UserPresenter
+import sh.awtk.vothemis.principal.LoginUser
 import sh.awtk.vothemis.viewmodel.QuestionRequest
 import sh.awtk.vothemis.viewmodel.UserRequest
 import sh.awtk.vothemis.viewmodel.VotingRequest
@@ -66,24 +71,29 @@ private fun Route.questionRoute() {
  * User
  */
 private fun Route.userRoute() {
+    val presenter: UserPresenter by inject()
+
     @Location("/user/{id}")
     data class SpecificUserLocation(val id: Long)
 
     // Create new User
     post("/user/create") {
         val body = call.receive<UserRequest>()
-        call.respond(Unit)
+        call.respond(presenter.registUser(body))
     }
 
     // Get user data by ID
-    get<SpecificUserLocation> {
-        call.respond(Unit)
+    get<SpecificUserLocation> { param ->
+        call.respond(presenter.getUser(param.id))
     }
 
     // Update own user data
-    put<SpecificUserLocation> {
+    put<SpecificUserLocation> { param ->
         val body = call.receive<UserRequest>()
-        call.respond(Unit)
+        val tokenId = call.principal<LoginUser>()?.id
+        if (tokenId != param.id) throw ForbiddenException("invalid user request")
+
+        call.respond(presenter.updateUserData(param.id, body))
     }
 
 }
