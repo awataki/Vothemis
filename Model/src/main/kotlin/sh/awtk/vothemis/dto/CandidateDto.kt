@@ -13,7 +13,7 @@ data class CandidateDto(
     val numOfVote: NumOfVote
 )
 
-fun CandidateDto.toViewModel() = Candidate (
+fun CandidateDto.toViewModel() = Candidate(
     id.value,
     questionId.value,
     description.value,

@@ -19,8 +19,8 @@ import io.ktor.response.respond
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
 import org.koin.ktor.ext.Koin
-import sh.awtk.vothemis.exposed.DatabaseFactory
 import sh.awtk.vothemis.exception.HttpException
+import sh.awtk.vothemis.exposed.DatabaseFactory
 import sh.awtk.vothemis.jwt.JWTFactory
 import sh.awtk.vothemis.principal.LoginUser
 import sh.awtk.vothemis.routes.v1Route
