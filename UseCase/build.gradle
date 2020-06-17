@@ -1,3 +1,4 @@
 dependencies {
     implementation project(":Model")
+    implementation project(":CommonLib")
 }

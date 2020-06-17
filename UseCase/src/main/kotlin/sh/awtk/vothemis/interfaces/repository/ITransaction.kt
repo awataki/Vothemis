@@ -1,4 +1,4 @@
-package sh.awtk.vothemis.`interface`
+package sh.awtk.vothemis.interfaces.repository
 
 interface ITransaction {
     suspend fun <T> run(codeBlock: () -> T): T
