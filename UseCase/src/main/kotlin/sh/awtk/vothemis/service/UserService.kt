@@ -24,7 +24,7 @@ class UserService(
         userRepo.update(user)
     } ?: throw ObjectNotFoundExcepiton("find user fail ${user.id.value}")
 
-    override suspend fun deleteUser(id: UserId): UserId = transaction.run {
+    override suspend fun deleteUser(id: UserId): Unit? = transaction.run {
         userRepo.delete(id.value)
     } ?: throw ObjectNotFoundExcepiton("find user fail $id")
 }

@@ -7,5 +7,5 @@ interface IUserService {
     suspend fun createNewUser(user: UserDto): UserDto
     suspend fun getSpecificUser(id: UserId): UserDto
     suspend fun updateUserData(user: UserDto): UserId
-    suspend fun deleteUser(id: UserId): UserId
+    suspend fun deleteUser(id: UserId): Unit?
 }

@@ -8,5 +8,5 @@ interface IUserRepository {
     fun findBy(id: Long): UserDto?
     fun findAll(): List<UserDto>?
     fun update(user: UserDto): UserId?
-    fun delete(id: Long): UserId?
+    fun delete(id: Long): Unit?
 }

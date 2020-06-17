@@ -14,7 +14,7 @@ data class UserDto(
 )
 
 fun UserDto.toResponse() = UserResponse(
-    id.value,
-    name.value,
-    bio.value
+    id = id.value,
+    name = name.value,
+    bio = bio.value ?: ""
 )

@@ -1,4 +1,4 @@
-package sh.awtk.vothemis.database
+package sh.awtk.vothemis.exposed
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource

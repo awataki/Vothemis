@@ -1,4 +1,4 @@
-package sh.awtk.vothemis.database.table
+package sh.awtk.vothemis.exposed.table
 
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.LongEntity
