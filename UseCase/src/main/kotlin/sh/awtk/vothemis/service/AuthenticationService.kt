@@ -16,7 +16,7 @@ class AuthenticationService(
 ) : IAuthenticationService {
     override suspend fun login(user: UserDto): TokenPair {
         val loginUser = transaction.run {
-            userRepo.findBy(user.id) ?: throw ObjectNotFoundExcepiton("fail to find user ${user.id.value}")
+            userRepo.findBy(user.name) ?: throw ObjectNotFoundExcepiton("fail to find user ${user.id.value}")
         }
 
         if (!BCryptFactory.checkBCrypt(
