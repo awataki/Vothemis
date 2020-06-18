@@ -9,8 +9,10 @@ import io.ktor.response.respond
 import io.ktor.routing.*
 import org.koin.ktor.ext.inject
 import sh.awtk.vothemis.exception.ForbiddenException
+import sh.awtk.vothemis.presenter.LoginPresenter
 import sh.awtk.vothemis.presenter.UserPresenter
 import sh.awtk.vothemis.principal.LoginUser
+import sh.awtk.vothemis.viewmodel.LoginRequest
 import sh.awtk.vothemis.viewmodel.QuestionRequest
 import sh.awtk.vothemis.viewmodel.UserRequest
 import sh.awtk.vothemis.viewmodel.VotingRequest
@@ -105,11 +107,12 @@ private fun Route.userRoute() {
  * Login
  */
 private fun Route.loginRoute() {
+    val loginPresenter: LoginPresenter by inject()
 
     // Login
     post("/login") {
-        val body = call.receive<UserRequest>()
-        call.respond(Unit)
+        val body = call.receive<LoginRequest>()
+        call.respond(loginPresenter.login(body))
     }
 }
 

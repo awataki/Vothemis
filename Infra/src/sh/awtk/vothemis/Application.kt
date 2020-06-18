@@ -23,7 +23,7 @@ import org.koin.logger.slf4jLogger
 import sh.awtk.vothemis.exception.HttpException
 import sh.awtk.vothemis.exposed.DatabaseFactory
 import sh.awtk.vothemis.jwt.JWTFactory
-import sh.awtk.vothemis.module.UserModule
+import sh.awtk.vothemis.module.KoinModules
 import sh.awtk.vothemis.principal.LoginUser
 import sh.awtk.vothemis.routes.v1Route
 
@@ -129,7 +129,7 @@ private fun Application.installKoin() {
     install(Koin) {
         slf4jLogger()
         modules(
-            UserModule().module()
+            KoinModules.modules
         )
     }
 }
