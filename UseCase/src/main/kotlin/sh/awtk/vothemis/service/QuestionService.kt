@@ -4,6 +4,7 @@ import sh.awtk.vothemis.dto.QuestionDto
 import sh.awtk.vothemis.dto.validate
 import sh.awtk.vothemis.exception.ForbiddenException
 import sh.awtk.vothemis.exception.ObjectNotFoundExcepiton
+import sh.awtk.vothemis.interfaces.repository.ICandidateRepository
 import sh.awtk.vothemis.interfaces.repository.IQuestionRepository
 import sh.awtk.vothemis.interfaces.repository.ITransaction
 import sh.awtk.vothemis.interfaces.repository.IUserRepository
@@ -13,6 +14,7 @@ import sh.awtk.vothemis.vo.UserId
 
 class QuestionService(
     private val questionRepo: IQuestionRepository,
+    private val candidateRepo: ICandidateRepository,
     private val userRepo: IUserRepository,
     private val transaction: ITransaction
 ) :
@@ -21,14 +23,17 @@ class QuestionService(
         question.validate()
         return transaction.run {
             question.createdBy =
-                userRepo.findBy(userId) ?: throw ObjectNotFoundExcepiton("fail to find uer ${userId.value}")
+                userRepo.findBy(userId) ?: throw ObjectNotFoundExcepiton("fail to find uer $userId")
             questionRepo.create(question)
+                .also {
+                    it.candidates = candidateRepo.replace(it.id, question.candidates)
+                }
         }
     }
 
     override suspend fun getQuestion(id: QuestionId): QuestionDto {
         return transaction.run {
-            questionRepo.findBy(id) ?: throw ObjectNotFoundExcepiton("fail to find question ${id.value}")
+            questionRepo.findBy(id) ?: throw ObjectNotFoundExcepiton("fail to find question $id")
         }
     }
 
@@ -44,7 +49,9 @@ class QuestionService(
             val prevQuestion = questionRepo.findBy(question.id)
             if (prevQuestion?.createdBy?.id != userId) throw ForbiddenException("User id not match")
             question.createdBy = prevQuestion.createdBy
-            questionRepo.update(question) ?: throw ObjectNotFoundExcepiton("fail to find question ${question.id.value}")
+            questionRepo.update(question)?.also {
+                it.candidates = candidateRepo.replace(it.id, question.candidates)
+            } ?: throw ObjectNotFoundExcepiton("fail to find question ${question.id}")
         }
     }
 
@@ -52,7 +59,7 @@ class QuestionService(
         return transaction.run {
             val prevQuestion = questionRepo.findBy(id)
             if (prevQuestion?.createdBy?.id != userId) throw ForbiddenException("User id not match")
-            questionRepo.delete(id) ?: throw ObjectNotFoundExcepiton("fail to find question ${id.value}")
+            questionRepo.delete(id) ?: throw ObjectNotFoundExcepiton("fail to find question $id")
         }
     }
 

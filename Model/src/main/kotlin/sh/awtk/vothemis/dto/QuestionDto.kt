@@ -12,7 +12,7 @@ data class QuestionDto(
     val id: QuestionId,
     val title: QuestionTitle,
     val sentence: QuestionSentence,
-    val candidates: List<CandidateDto>,
+    var candidates: List<CandidateDto>,
     val until: Date,
     var createdBy: UserDto
 )

@@ -8,9 +8,9 @@ import sh.awtk.vothemis.vo.UserName
 
 data class UserDto(
     val id: UserId,
-    val name: UserName,
-    var password: UserPass,
-    val bio: UserBio
+    val name: UserName = UserName(""),
+    var password: UserPass = UserPass(""),
+    val bio: UserBio = UserBio("")
 )
 
 fun UserDto.toResponse() = UserResponse(
