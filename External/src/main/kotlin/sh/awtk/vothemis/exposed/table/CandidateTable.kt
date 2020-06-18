@@ -12,7 +12,7 @@ import sh.awtk.vothemis.vo.NumOfVote
 import sh.awtk.vothemis.vo.QuestionId
 
 object CandidateTable : LongIdTable("Candidate") {
-    var questionID: Column<Long> = long("question_id")
+    var questionID: Column<EntityID<Long>> = reference("question_id", QuestionTable)
     var description: Column<String> = varchar("description", 256)
     var numOfVote: Column<Long> = long("num_of_vote")
 }
@@ -20,7 +20,7 @@ object CandidateTable : LongIdTable("Candidate") {
 class CandidateEntity(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<CandidateEntity>(CandidateTable)
 
-    var questionID by CandidateTable.questionID
+    var questionID by QuestionEntity referencedOn CandidateTable.questionID
     var description by CandidateTable.description
     var numOfVote by CandidateTable.numOfVote
     var parentQuestion by QuestionEntity referencedOn CandidateTable.questionID
@@ -28,7 +28,7 @@ class CandidateEntity(id: EntityID<Long>) : LongEntity(id) {
     fun toDto(): CandidateDto {
         return CandidateDto(
             id = CandidateId(id.value),
-            questionId = QuestionId(questionID),
+            questionId = QuestionId(questionID.id.value),
             description = CandidateDescription(description),
             numOfVote = NumOfVote(numOfVote)
         )
