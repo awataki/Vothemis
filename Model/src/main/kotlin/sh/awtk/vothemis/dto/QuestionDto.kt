@@ -14,7 +14,7 @@ data class QuestionDto(
     val sentence: QuestionSentence,
     var candidates: List<CandidateDto>,
     val until: Date,
-    var createdBy: UserDto
+    var createdBy: UserDto?
 )
 
 fun QuestionDto.toResponse(): QuestionResponse = QuestionResponse(
@@ -23,7 +23,7 @@ fun QuestionDto.toResponse(): QuestionResponse = QuestionResponse(
     sentence.value,
     candidates.map { it.toViewModel() },
     until,
-    createdBy.toResponse()
+    createdBy!!.toResponse()
 )
 
 fun QuestionDto.validate(): QuestionDto {
