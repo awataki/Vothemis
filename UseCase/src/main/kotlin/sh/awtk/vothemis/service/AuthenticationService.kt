@@ -26,7 +26,7 @@ class AuthenticationService(
         ) throw AuthenticationException("password not match")
 
         return TokenPair(
-            access_token = JWTFactory.newToken(user.id.value),
+            access_token = JWTFactory.newToken(loginUser.id.value),
             // TODO Implement refresh token
             refresh_token = "unimplemented"
         )
