@@ -1,5 +1,7 @@
 package sh.awtk.vothemis.dto
 
+import org.joda.time.DateTime
+import sh.awtk.vothemis.exception.BadRequestException
 import sh.awtk.vothemis.viewmodel.QuestionResponse
 import sh.awtk.vothemis.vo.QuestionId
 import sh.awtk.vothemis.vo.QuestionSentence
@@ -12,10 +14,10 @@ data class QuestionDto(
     val sentence: QuestionSentence,
     val candidates: List<CandidateDto>,
     val until: Date,
-    val createdBy: UserDto
+    var createdBy: UserDto
 )
 
-private fun QuestionDto.toResponse(): QuestionResponse = QuestionResponse(
+fun QuestionDto.toResponse(): QuestionResponse = QuestionResponse(
     id.value,
     title.value,
     sentence.value,
@@ -23,3 +25,11 @@ private fun QuestionDto.toResponse(): QuestionResponse = QuestionResponse(
     until,
     createdBy.toResponse()
 )
+
+fun QuestionDto.validate(): QuestionDto {
+    if (this.title.value.isBlank()) throw BadRequestException("")
+    if (this.sentence.value.isBlank()) throw BadRequestException("")
+    if (this.candidates.isNullOrEmpty()) throw BadRequestException("")
+    if (this.until < DateTime.now().toDate()) throw BadRequestException("")
+    return this
+}
