@@ -7,6 +7,6 @@ interface IQuestionRepository {
     fun create(question: QuestionDto): QuestionDto
     fun findBy(Id: QuestionId): QuestionDto?
     fun findAll(): List<QuestionDto>?
-    fun update(question: QuestionDto): QuestionDto
-    fun delete(Id: QuestionId): Unit
+    fun update(question: QuestionDto): QuestionDto?
+    fun delete(Id: QuestionId): Unit?
 }

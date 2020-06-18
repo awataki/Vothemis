@@ -44,7 +44,7 @@ class QuestionService(
             val prevQuestion = questionRepo.findBy(question.id)
             if (prevQuestion?.createdBy?.id != userId) throw ForbiddenException("User id not match")
             question.createdBy = prevQuestion.createdBy
-            questionRepo.update(question)
+            questionRepo.update(question) ?: throw ObjectNotFoundExcepiton("fail to find question ${question.id.value}")
         }
     }
 
@@ -52,7 +52,7 @@ class QuestionService(
         return transaction.run {
             val prevQuestion = questionRepo.findBy(id)
             if (prevQuestion?.createdBy?.id != userId) throw ForbiddenException("User id not match")
-            questionRepo.delete(id)
+            questionRepo.delete(id) ?: throw ObjectNotFoundExcepiton("fail to find question ${id.value}")
         }
     }
 

@@ -5,6 +5,11 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.LongIdTable
 import org.jetbrains.exposed.sql.Column
+import sh.awtk.vothemis.dto.CandidateDto
+import sh.awtk.vothemis.vo.CandidateDescription
+import sh.awtk.vothemis.vo.CandidateId
+import sh.awtk.vothemis.vo.NumOfVote
+import sh.awtk.vothemis.vo.QuestionId
 
 object CandidateTable : LongIdTable("Candidate") {
     var questionID: Column<Long> = long("question_id")
@@ -19,4 +24,13 @@ class CandidateEntity(id: EntityID<Long>) : LongEntity(id) {
     var description by CandidateTable.description
     var numOfVote by CandidateTable.numOfVote
     var parentQuestion by QuestionEntity referencedOn CandidateTable.questionID
+
+    fun toDto(): CandidateDto {
+        return CandidateDto(
+            id = CandidateId(id.value),
+            questionId = QuestionId(questionID),
+            description = CandidateDescription(description),
+            numOfVote = NumOfVote(numOfVote)
+        )
+    }
 }
