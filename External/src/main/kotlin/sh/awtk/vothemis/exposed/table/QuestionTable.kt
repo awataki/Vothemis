@@ -11,7 +11,7 @@ import sh.awtk.vothemis.vo.QuestionId
 import sh.awtk.vothemis.vo.QuestionSentence
 import sh.awtk.vothemis.vo.QuestionTitle
 
-object QuestionTable : LongIdTable("questions") {
+object QuestionTable : LongIdTable("Questions") {
     var title: Column<String> = varchar("title", 256)
     var sentence: Column<String> = varchar("sentence", 256)
     var until: Column<DateTime> = date("until")

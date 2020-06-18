@@ -10,10 +10,12 @@ import sh.awtk.vothemis.vo.QuestionId
 
 class CandidateRepositoryImpl : ICandidateRepository {
     override fun replace(questionId: QuestionId, candidates: List<CandidateDto>): List<CandidateDto> {
-        CandidateEntity.find { CandidateTable.questionID eq questionId.value }.single().delete()
+        CandidateEntity.find { CandidateTable.questionID eq questionId.value }.also {
+            if (!it.empty()) it.single().delete()
+        }
         return candidates.map {
             CandidateEntity.new {
-                this.questionID = QuestionEntity.findById(it.id.value) ?: throw ObjectNotFoundExcepiton("")
+                this.questionID = QuestionEntity.findById(questionId.value) ?: throw ObjectNotFoundExcepiton("fail to find Question $questionId")
                 this.description = it.description.value
                 this.numOfVote = it.numOfVote.value
             }.toDto()

@@ -47,7 +47,7 @@ class QuestionService(
         question.validate()
         return transaction.run {
             val prevQuestion = questionRepo.findBy(question.id)
-            if (prevQuestion?.createdBy?.id != userId) throw ForbiddenException("User id not match")
+            if (prevQuestion?.createdBy?.id?.value != userId.value) throw ForbiddenException("User id not match")
             question.createdBy = prevQuestion.createdBy
             questionRepo.update(question)?.also {
                 it.candidates = candidateRepo.replace(it.id, question.candidates)
@@ -58,7 +58,7 @@ class QuestionService(
     override suspend fun deleteQuestion(id: QuestionId, userId: UserId) {
         return transaction.run {
             val prevQuestion = questionRepo.findBy(id)
-            if (prevQuestion?.createdBy?.id != userId) throw ForbiddenException("User id not match")
+            if (prevQuestion?.createdBy?.id?.value != userId.value) throw ForbiddenException("User id not match")
             questionRepo.delete(id) ?: throw ObjectNotFoundExcepiton("fail to find question $id")
         }
     }

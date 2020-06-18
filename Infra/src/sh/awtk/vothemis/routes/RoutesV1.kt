@@ -8,8 +8,10 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.*
 import org.koin.ktor.ext.inject
+import sh.awtk.vothemis.exception.AuthenticationException
 import sh.awtk.vothemis.exception.ForbiddenException
 import sh.awtk.vothemis.presenter.LoginPresenter
+import sh.awtk.vothemis.presenter.QuestionPresenter
 import sh.awtk.vothemis.presenter.UserPresenter
 import sh.awtk.vothemis.principal.LoginUser
 import sh.awtk.vothemis.viewmodel.LoginRequest
@@ -34,29 +36,34 @@ fun Routing.v1Route() {
  */
 @KtorExperimentalLocationsAPI
 private fun Route.questionRoute() {
+    val questionPresenter: QuestionPresenter by inject()
+
     @Location("/question/{id}")
     data class SpecificQuestionLocation(val id: Long)
 
     // Create new question
     post("/question") {
         val body = call.receive<QuestionRequest>()
-        call.respond(Unit)
+        val tokenId = call.principal<LoginUser>()?.id ?: throw AuthenticationException("invalid token")
+        call.respond(questionPresenter.createNewQuestion(body, tokenId))
     }
 
     // Get specific question by ID
     get<SpecificQuestionLocation> { param ->
-        call.respond(Unit)
+        call.respond(questionPresenter.getQuestionById(param.id))
     }
 
     // Update specific question by ID
     put<SpecificQuestionLocation> {
         val body = call.receive<QuestionRequest>()
-        call.respond(Unit)
+        val tokenId = call.principal<LoginUser>()?.id ?: throw AuthenticationException("invalid token")
+        call.respond(questionPresenter.updateSpecificQuestion(body, tokenId))
     }
 
     // Delete specific question by ID
-    delete<SpecificQuestionLocation> {
-        call.respond(Unit)
+    delete<SpecificQuestionLocation> { param ->
+        val tokenId = call.principal<LoginUser>()?.id ?: throw AuthenticationException("invalid token")
+        call.respond(questionPresenter.deleteSpecificQuestion(param.id, tokenId))
     }
 
     // Voting to question
@@ -67,7 +74,7 @@ private fun Route.questionRoute() {
 
     // Get all question list
     get("/question/list") {
-        call.respond(Unit)
+        call.respond(questionPresenter.getAllQuestionList())
     }
 }
 
@@ -76,7 +83,7 @@ private fun Route.questionRoute() {
  */
 @KtorExperimentalLocationsAPI
 private fun Route.userRoute() {
-    val presenter: UserPresenter by inject()
+    val userPresenter: UserPresenter by inject()
 
     @Location("/user/{id}")
     data class SpecificUserLocation(val id: Long)
@@ -84,12 +91,12 @@ private fun Route.userRoute() {
     // Create new User
     post("/user/create") {
         val body = call.receive<UserRequest>()
-        call.respond(presenter.registUser(body))
+        call.respond(userPresenter.registUser(body))
     }
 
     // Get user data by ID
     get<SpecificUserLocation> { param ->
-        call.respond(presenter.getUser(param.id))
+        call.respond(userPresenter.getUser(param.id))
     }
 
     // Update own user data
@@ -98,7 +105,7 @@ private fun Route.userRoute() {
         val tokenId = call.principal<LoginUser>()?.id
         if (tokenId != param.id) throw ForbiddenException("invalid user request")
 
-        call.respond(presenter.updateUserData(param.id, body))
+        call.respond(userPresenter.updateUserData(param.id, body))
     }
 
 }

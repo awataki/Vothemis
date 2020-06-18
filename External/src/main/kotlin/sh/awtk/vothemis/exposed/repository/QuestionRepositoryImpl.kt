@@ -13,7 +13,7 @@ class QuestionRepositoryImpl : IQuestionRepository {
         title = question.title.value
         sentence = question.sentence.value
         until = DateTime(question.until)
-        created_by = UserEntity.findById(question.createdBy.id.value)
+        created_by = UserEntity.findById(question.createdBy!!.id.value)
             ?: throw ObjectNotFoundExcepiton("fail to find created by user")
     }.toDto()
 

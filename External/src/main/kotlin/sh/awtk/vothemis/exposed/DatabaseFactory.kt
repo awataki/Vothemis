@@ -3,6 +3,11 @@ package sh.awtk.vothemis.exposed
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
+import sh.awtk.vothemis.exposed.table.CandidateTable
+import sh.awtk.vothemis.exposed.table.QuestionTable
+import sh.awtk.vothemis.exposed.table.UserTable
 import kotlin.properties.Delegates
 
 object DatabaseFactory {
@@ -17,6 +22,10 @@ object DatabaseFactory {
 
     fun init() {
         Database.connect(hikariCP())
+        transaction {
+            SchemaUtils.drop(UserTable, QuestionTable, CandidateTable)
+            SchemaUtils.create(UserTable, QuestionTable, CandidateTable)
+        }
     }
 
     private fun hikariCP(): HikariDataSource {

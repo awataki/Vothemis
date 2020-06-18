@@ -11,7 +11,7 @@ import sh.awtk.vothemis.vo.UserBio
 import sh.awtk.vothemis.vo.UserId
 import sh.awtk.vothemis.vo.UserName
 
-object UserTable : LongIdTable("users") {
+object UserTable : LongIdTable("Users") {
     val userName: Column<String> = varchar("user_name", 256).uniqueIndex()
     val hash: Column<String> = varchar("hash", 60)
     val bio: Column<String?> = varchar("bio", 256).nullable()
