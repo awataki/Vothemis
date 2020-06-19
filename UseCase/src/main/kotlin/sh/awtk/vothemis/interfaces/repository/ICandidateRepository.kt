@@ -5,4 +5,5 @@ import sh.awtk.vothemis.vo.QuestionId
 
 interface ICandidateRepository {
     fun replace(questionId: QuestionId, candidates: List<CandidateDto>): List<CandidateDto>
+    fun deleteBy(questionId: QuestionId)
 }

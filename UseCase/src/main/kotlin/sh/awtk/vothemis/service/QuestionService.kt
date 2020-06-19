@@ -59,6 +59,7 @@ class QuestionService(
         return transaction.run {
             val prevQuestion = questionRepo.findBy(id)
             if (prevQuestion?.createdBy?.id?.value != userId.value) throw ForbiddenException("User id not match")
+            candidateRepo.deleteBy(id)
             questionRepo.delete(id) ?: throw ObjectNotFoundExcepiton("fail to find question $id")
         }
     }

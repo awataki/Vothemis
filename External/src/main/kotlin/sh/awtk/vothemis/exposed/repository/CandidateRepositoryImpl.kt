@@ -15,10 +15,17 @@ class CandidateRepositoryImpl : ICandidateRepository {
         }
         return candidates.map {
             CandidateEntity.new {
-                this.questionID = QuestionEntity.findById(questionId.value) ?: throw ObjectNotFoundExcepiton("fail to find Question $questionId")
+                this.questionID = QuestionEntity.findById(questionId.value)
+                    ?: throw ObjectNotFoundExcepiton("fail to find Question $questionId")
                 this.description = it.description.value
                 this.numOfVote = it.numOfVote.value
             }.toDto()
+        }
+    }
+
+    override fun deleteBy(questionId: QuestionId) {
+        CandidateEntity.find { CandidateTable.questionID eq questionId.value }.also {
+            if (!it.empty()) it.single().delete()
         }
     }
 
