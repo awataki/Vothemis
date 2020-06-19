@@ -32,13 +32,13 @@ class UserService(
     }
 
     override suspend fun updateUserData(user: UserDto): UserDto {
-        user.also {
-            if (it.name.value.isBlank()) throw BadRequestException("user.name is blank")
-            if (it.password.value.isBlank()) it.password =
-                userRepo.findBy(it.id)?.password ?: throw ObjectNotFoundExcepiton("find user fail ${it.id.value}")
-            else it.password = UserPass(BCryptFactory.genBCryptHash(it.password.value))
-        }
         return transaction.run {
+            user.also {
+                if (it.name.value.isBlank()) throw BadRequestException("user.name is blank")
+                if (it.password.value.isBlank()) it.password =
+                    userRepo.findBy(it.id)?.password ?: throw ObjectNotFoundExcepiton("find user fail ${it.id.value}")
+                else it.password = UserPass(BCryptFactory.genBCryptHash(it.password.value))
+            }
             userRepo.update(user)?.value
             userRepo.findBy(user.id)
         } ?: throw ObjectNotFoundExcepiton("find user fail ${user.id.value}")
