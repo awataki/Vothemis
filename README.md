@@ -52,4 +52,4 @@ vothemis {
 ```
 
 # API Reference
-Please see `Vothemis.v1.yaml`
+Please see `Vothemis.v1.yaml` with SwaggerUI
