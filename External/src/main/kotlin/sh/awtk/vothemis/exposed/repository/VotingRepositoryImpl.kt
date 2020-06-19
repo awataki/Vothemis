@@ -1,6 +1,7 @@
 package sh.awtk.vothemis.exposed.repository
 
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
 import sh.awtk.vothemis.exception.ObjectNotFoundExcepiton
 import sh.awtk.vothemis.exposed.table.*
 import sh.awtk.vothemis.interfaces.repository.IVotingRepository
@@ -31,6 +32,7 @@ class VotingRepositoryImpl : IVotingRepository {
         NumOfVote(VotingEntity.find { VotingTable.candidateId eq candidateId.value }.count().toLong())
 
 
-    override fun deleteBy(questionId: QuestionId) =
-        VotingEntity.find { VotingTable.questionId eq questionId.value }.single().delete()
+    override fun deleteBy(questionId: QuestionId) {
+        VotingTable.deleteWhere { VotingTable.questionId eq questionId.value }
+    }
 }

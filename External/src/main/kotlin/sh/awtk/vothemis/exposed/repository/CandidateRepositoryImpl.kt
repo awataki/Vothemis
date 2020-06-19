@@ -1,5 +1,6 @@
 package sh.awtk.vothemis.exposed.repository
 
+import org.jetbrains.exposed.sql.deleteWhere
 import sh.awtk.vothemis.dto.CandidateDto
 import sh.awtk.vothemis.exception.ObjectNotFoundExcepiton
 import sh.awtk.vothemis.exposed.table.CandidateEntity
@@ -11,7 +12,7 @@ import sh.awtk.vothemis.vo.QuestionId
 
 class CandidateRepositoryImpl : ICandidateRepository {
     override fun isParent(questionId: QuestionId, candidateId: CandidateId): Boolean {
-        return CandidateEntity.findById(candidateId.value)?.parentQuestion?.id?.value == questionId.value
+        return CandidateEntity.findById(candidateId.value)?.parentQuestion?.id?.value == questionId.value ?: false
     }
 
     override fun replace(questionId: QuestionId, candidates: List<CandidateDto>): List<CandidateDto> {
@@ -28,9 +29,7 @@ class CandidateRepositoryImpl : ICandidateRepository {
     }
 
     override fun deleteBy(questionId: QuestionId) {
-        CandidateEntity.find { CandidateTable.questionID eq questionId.value }.let {
-            if (!it.empty()) it.single().delete()
-        }
+        CandidateTable.deleteWhere { CandidateTable.questionID eq questionId.value}
     }
 
 }
