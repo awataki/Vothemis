@@ -67,9 +67,10 @@ private fun Route.questionRoute() {
     }
 
     // Voting to question
-    post<SpecificQuestionLocation> {
+    post<SpecificQuestionLocation> { param ->
         val body = call.receive<VotingRequest>()
-        call.respond(Unit)
+        val tokenId = call.principal<LoginUser>()?.id ?: throw AuthenticationException("invalid token")
+        call.respond(questionPresenter.votingQuestion(param.id, tokenId, body.candidate_id))
     }
 
     // Get all question list
