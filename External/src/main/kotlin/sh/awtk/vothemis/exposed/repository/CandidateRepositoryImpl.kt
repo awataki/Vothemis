@@ -6,9 +6,14 @@ import sh.awtk.vothemis.exposed.table.CandidateEntity
 import sh.awtk.vothemis.exposed.table.CandidateTable
 import sh.awtk.vothemis.exposed.table.QuestionEntity
 import sh.awtk.vothemis.interfaces.repository.ICandidateRepository
+import sh.awtk.vothemis.vo.CandidateId
 import sh.awtk.vothemis.vo.QuestionId
 
 class CandidateRepositoryImpl : ICandidateRepository {
+    override fun isParent(questionId: QuestionId, candidateId: CandidateId): Boolean {
+        return CandidateEntity.findById(candidateId.value)?.parentQuestion?.id?.value == questionId.value
+    }
+
     override fun replace(questionId: QuestionId, candidates: List<CandidateDto>): List<CandidateDto> {
         CandidateEntity.find { CandidateTable.questionID eq questionId.value }.let {
             if (!it.empty()) it.single().delete()

@@ -2,6 +2,7 @@ package sh.awtk.vothemis.service
 
 import sh.awtk.vothemis.dto.QuestionDto
 import sh.awtk.vothemis.dto.validate
+import sh.awtk.vothemis.exception.BadRequestException
 import sh.awtk.vothemis.exception.ForbiddenException
 import sh.awtk.vothemis.exception.ObjectNotFoundExcepiton
 import sh.awtk.vothemis.interfaces.repository.*
@@ -44,6 +45,7 @@ class QuestionService(
 
     override suspend fun voting(questionId: QuestionId, userId: UserId, candidateId: CandidateId) {
         return transaction.run {
+            if (!candidateRepo.isParent(questionId, candidateId)) throw BadRequestException("wrong question id")
             votingRepo.replace(questionId, userId, candidateId)
         }
     }
