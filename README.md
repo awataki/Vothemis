@@ -1,14 +1,14 @@
 # Vothemis
 Simple and Standalone Voting Api
 
-# Getting started
+## Getting started
 ```
 git clone https://github.com/awataki/Vothemis
 docker-compose up -d //Start postgresql
 ./gradlew run // Start Vothemis Server
 ```
 
-# Configration
+## Configration
 Vothemis/Infra/resources/application.conf
 
 ```
@@ -51,5 +51,5 @@ vothemis {
 
 ```
 
-# API Reference
+## API Reference
 Please see `Vothemis.v1.yaml` with SwaggerUI
