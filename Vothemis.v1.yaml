@@ -1,0 +1,452 @@
+openapi: 3.0.0
+info:
+  title: Vothemis
+  version: '1.0'
+  description: Simple and Standalone Voting Api
+  license:
+    name: Apache-License 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0'
+  contact:
+    name: Awataki
+    email: awataki1206@gmail.com
+servers:
+  - url: 'https://vothemis.awtk.sh/api/v1'
+    description: awtk.sh
+  - url: 'http://localhost:9841/v1'
+    description: debug
+tags:
+  - name: Question
+  - name: User
+  - name: Login
+paths:
+  /question:
+    post:
+      summary: Create new Question
+      operationId: post-question
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Create new Question
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionRequest'
+        description: ''
+      parameters: []
+      tags:
+        - Question
+  '/question/{id}':
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+        name: id
+        in: path
+        required: true
+        description: Question id
+    get:
+      summary: Get specific Question
+      tags:
+        - Question
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-question-id
+      parameters: []
+      description: Retern specific question from id
+    put:
+      summary: Update existing Question
+      operationId: put-question-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Update existing question
+      tags:
+        - Question
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionRequest'
+        description: ''
+    delete:
+      summary: Delete specific Question
+      operationId: delete-question-id
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Delete existing question
+      tags:
+        - Question
+      parameters: []
+    post:
+      summary: Voting to Question
+      operationId: post-question-id
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Voting question
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoringRequest'
+        description: ''
+      tags:
+        - Question
+  /user/create:
+    post:
+      summary: Create new User
+      operationId: post-user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Create new User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserResponse'
+      tags:
+        - User
+    parameters: []
+  /login:
+    post:
+      summary: Authorization Login
+      operationId: post-login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              example:
+                value:
+                  name: awataki
+                  password: hoge
+        description: ''
+      security: []
+      tags:
+        - Login
+      description: Authorization Login
+      parameters: []
+  '/user/{id}':
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get specific User
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-user-id
+      security:
+        - JWT: []
+      description: Get User data that specific id
+    put:
+      summary: Update specific User
+      operationId: put-user-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      tags:
+        - User
+      description: Update existing user
+  /question/list:
+    get:
+      summary: Get all Questions
+      tags:
+        - Question
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuestionResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-question-list
+      description: Get all of avaliable question
+components:
+  schemas:
+    QuestionResponse:
+      title: Question
+      type: object
+      x-examples: {}
+      description: Be Voted Question
+      x-tags:
+        - Question
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+          description: ''
+        sentence:
+          type: string
+          description: ''
+        available_candidate:
+          type: array
+          description: ''
+          items:
+            $ref: '#/components/schemas/Candidate'
+        until:
+          type: string
+          format: date-time
+        created_by:
+          $ref: '#/components/schemas/User'
+      required:
+        - id
+        - title
+        - sentence
+        - available_candidate
+    UserResponse:
+      title: User
+      type: object
+      x-tags:
+        - User
+      description: User Data
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        bio:
+          type: string
+      required:
+        - id
+        - name
+    Candidate:
+      title: Candidate
+      type: object
+      x-tags:
+        - Question
+      description: Detail of voting
+      properties:
+        candidate_id:
+          type: integer
+          format: int64
+        question_id:
+          type: integer
+          format: int64
+        description:
+          type: string
+        num_of_vote:
+          type: integer
+          format: int32
+    TokenPair:
+      title: TokenPair
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+      x-tags:
+        - Login
+    VoringRequest:
+      title: Voring
+      type: object
+      properties:
+        candidate_id:
+          type: integer
+          format: int64
+    LoginRequest:
+      title: LoginRequest
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+    QuestionRequest:
+      title: QuestionRequest
+      type: object
+      properties:
+        title:
+          type: string
+          description: ''
+        sentence:
+          type: string
+          description: ''
+        available_candidate:
+          type: array
+          description: ''
+          items:
+            $ref: '#/components/schemas/Candidate'
+        until:
+          type: string
+          format: date-time
+      required:
+        - title
+        - sentence
+        - available_candidate
+    UserRequest:
+      title: UserRequest
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        bio:
+          type: string
+      required:
+        - name
+        - password
+  securitySchemes:
+    JWT:
+      name: Authorization
+      type: apiKey
+      in: header
+security:
+  - JWT: []
