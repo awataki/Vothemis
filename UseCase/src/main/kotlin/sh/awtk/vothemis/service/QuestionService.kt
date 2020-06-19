@@ -6,6 +6,7 @@ import sh.awtk.vothemis.exception.ForbiddenException
 import sh.awtk.vothemis.exception.ObjectNotFoundExcepiton
 import sh.awtk.vothemis.interfaces.repository.*
 import sh.awtk.vothemis.interfaces.service.IQuestionService
+import sh.awtk.vothemis.vo.CandidateId
 import sh.awtk.vothemis.vo.QuestionId
 import sh.awtk.vothemis.vo.UserId
 
@@ -38,6 +39,12 @@ class QuestionService(
     override suspend fun getAllQuestions(): List<QuestionDto> {
         return transaction.run {
             questionRepo.findAll()?.map { it.addNumOfVote() } ?: throw ObjectNotFoundExcepiton("No question found")
+        }
+    }
+
+    override suspend fun voting(questionId: QuestionId, userId: UserId, candidateId: CandidateId) {
+        return transaction.run {
+            votingRepo.replace(questionId, userId, candidateId)
         }
     }
 
