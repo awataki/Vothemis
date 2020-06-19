@@ -10,7 +10,7 @@ data class CandidateDto(
     val id: CandidateId,
     val questionId: QuestionId,
     val description: CandidateDescription,
-    val numOfVote: NumOfVote
+    var numOfVote: NumOfVote = NumOfVote(0)
 )
 
 fun CandidateDto.toViewModel() = Candidate(
