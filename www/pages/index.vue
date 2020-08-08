@@ -8,6 +8,7 @@
               :title="card.title"
               :subtitle="card.subtitle"
               :btn="card.btn"
+              :link="card.link"
             />
           </v-col>
         </v-row>
@@ -28,19 +29,28 @@ export default {
         {
           title: '投票を作る',
           subtitle: '新たに投票を作成します。',
-          btn: '新規作成'
+          btn: '新規作成',
+          link: '/create'
         },
         {
           title: '投票する',
           subtitle: '開催中の設問に投票します。',
-          btn: '設問一覧'
+          btn: '設問一覧',
+          link: '/voting'
         },
         {
           title: '招待する',
           subtitle: '新しく投票に参加できるユーザーを招待します。',
-          btn: '招待'
+          btn: '招待',
+          link: '/invite'
         }
       ]
+    }
+  },
+  beforeCreate () {
+    const token = this.$store.state.token.aToken
+    if (token === '') {
+      this.$router.push('/login')
     }
   },
   head () {

@@ -6,11 +6,11 @@
     <v-card-subtitle>
       {{ subtitle }}
     </v-card-subtitle>
-    <v-card-action>
-      <v-btn class="ma-2">
+    <v-card-actions>
+      <v-btn class="ma-2" :to="link" nuxt>
         {{ btn }}
       </v-btn>
-    </v-card-action>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -35,6 +35,10 @@ export default Vue.extend({
       required: true
     },
     btn: {
+      type: String,
+      required: true
+    },
+    link: {
       type: String,
       required: true
     }
