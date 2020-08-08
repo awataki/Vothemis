@@ -17,10 +17,12 @@
   </v-container>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
   components: {
-    WelcomeCard: () => import('~/components/WelcomeCard')
+    WelcomeCard: () => import('~/components/WelcomeCard.vue')
   },
   data () {
     return {
@@ -53,10 +55,10 @@ export default {
       this.$router.push('/login')
     }
   },
-  head () {
+  head ():any {
     return {
       title: this.title
     }
   }
-}
+})
 </script>

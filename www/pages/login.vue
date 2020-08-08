@@ -45,10 +45,11 @@
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import LoginAPI from '~/assets/scripts/api/LoginAPI'
 
-export default {
+export default Vue.extend({
   data () {
     return {
       userName: '',
@@ -60,10 +61,10 @@ export default {
       const api = new LoginAPI()
       const tokenPair = await api.login(this.userName, this.password).catch(e => console.log(e.response.status))
       if (tokenPair !== undefined) {
-        this.$store.commit('token/updateAccessToken', tokenPair.aToken)
+        this.$store.commit('Token/updateAccessToken', tokenPair.aToken)
         await this.$router.push('/')
       }
     }
   }
-}
+})
 </script>
