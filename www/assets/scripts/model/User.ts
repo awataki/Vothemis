@@ -1,10 +1,10 @@
 export default class User {
-  get bio (): String {
-    return this._bio
+  get id (): Number {
+    return this._id
   }
 
-  set bio (value: String) {
-    this._bio = value
+  set id (value: Number) {
+    this._id = value
   }
 
   get name (): String {
@@ -15,21 +15,21 @@ export default class User {
     this._name = value
   }
 
-  get id (): Number {
-    return this._id
+  get bio (): String {
+    return this._bio
   }
 
-  set id (value: Number) {
-    this._id = value
+  set bio (value: String) {
+    this._bio = value
   }
 
-    private _id:Number;
-    private _name:String;
-    private _bio:String;
+    private _id!:Number;
+    private _name!:String;
+    private _bio!:String;
 
     constructor (id:Number, name:String, bio:String) {
-      this._id = id
-      this._name = name
-      this._bio = bio
+      this.id = id
+      this.name = name
+      this.bio = bio
     }
 }
