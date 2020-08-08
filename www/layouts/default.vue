@@ -41,9 +41,9 @@
         inset
       />
     </v-app-bar>
-    <v-content>
+    <v-main>
       <nuxt />
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
