@@ -1,15 +1,13 @@
 import axios from 'axios'
+import BaseAPI from '~/assets/scripts/api/BaseAPI'
 import TokenPair from '~/assets/scripts/model/TokenPair'
 
-export default class LoginAPI {
+export default class LoginAPI extends BaseAPI {
   async login (userName:String, pass:String) {
     const res = await axios.post('/api/v1/login',
       {
         name: userName,
         password: pass
-      },
-      {
-        headers: { 'Content-Type': 'application/json' }
       }
     )
     const json = res.data
