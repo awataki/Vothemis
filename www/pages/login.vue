@@ -16,6 +16,7 @@
           <v-card-text>
             <v-form>
               <v-text-field
+                v-model="userName"
                 label="ユーザー名"
                 name="login"
                 prepend-icon="mdi-account"
@@ -24,6 +25,7 @@
 
               <v-text-field
                 id="password"
+                v-model="password"
                 label="パスワード"
                 name="password"
                 prepend-icon="mdi-lock"
@@ -43,12 +45,25 @@
   </v-container>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
+<script>
+import LoginAPI from '~/assets/scripts/api/LoginAPI'
+
+export default {
+  data () {
+    return {
+      userName: '',
+      password: ''
+    }
+  },
   methods: {
-    login () {
+    async login () {
+      const api = new LoginAPI()
+      const tokenPair = await api.login(this.userName, this.password).catch(e => console.log(e.response.status))
+      if (tokenPair !== undefined) {
+        this.$store.commit('token/updateAccessToken', tokenPair.aToken)
+        await this.$router.push('/')
+      }
     }
   }
-})
+}
 </script>
