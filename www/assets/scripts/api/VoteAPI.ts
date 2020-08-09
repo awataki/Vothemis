@@ -17,9 +17,15 @@ export default class VoteAPI extends BaseAPI {
     return this.parseVote(json)
   }
 
-  async Voting (id:Number, candidateId: Number) {
+  async voting (id:Number, candidateId: Number) {
     const res = await axios.post('/api/v1/question/' + id.toString(), { candidate_id: candidateId.toString() }, this.createHeaderWithToken())
     return res.data
+  }
+
+  async create (newVote:Vote) {
+    const res = await axios.post('/api/v1/question/', { title: newVote.title, sentence: newVote.sentence, available_candidate: newVote.availableCandidate, until: newVote.until.toISOString() })
+    const json = res.data
+    return this.parseVote(json)
   }
 
   private parseVote (json:any):Vote {

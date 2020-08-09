@@ -41,14 +41,9 @@ export default Vue.extend({
       page: 1,
       pageCount: 0,
       headers: [
-        {
-          text: 'タイトル',
-          align: 'start',
-          sortable: false,
-          value: 'title'
-        },
-        { text: '作成者', value: 'createdBy.name' },
-        { text: '期限', value: 'untilString' }
+        { text: 'タイトル', value: 'title', width: '60%', align: 'start', sortable: false },
+        { text: '作成者', value: 'createdBy.name', width: '25%' },
+        { text: '期限', value: 'untilString', width: '15%' }
       ],
       loading: true
     }

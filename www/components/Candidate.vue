@@ -1,5 +1,5 @@
 <template>
-  <v-col cols="12" md="6">
+  <v-col cols="12" md="6" xl="3">
     <v-row align="center" class="ma-2">
       <v-radio :value="candidate.candidateId" class="" style="width: 100%;">
         <template v-slot:label>

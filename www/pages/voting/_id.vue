@@ -11,7 +11,7 @@
         cols="12"
         md="8"
       >
-        <v-card class="elevation-1 pa-4">
+        <v-card class="elevation-5 pa-4">
           <v-card-text>
             <h1>{{ detail.sentence }}</h1>
             <v-form>
@@ -52,7 +52,6 @@ export default Vue.extend({
     }
   },
   mounted () {
-    console.log(this.$store.state.Voted.list)
     this.vote = this.$store.state.Voted.list[this.$route.params.id.toString()]
   },
   methods: {
@@ -60,13 +59,11 @@ export default Vue.extend({
       const questionId:Number = +this.$route.params.id
       const candidateId:Number = this.vote
       const api = new VoteAPI(this.$store.state.Token.aToken)
-      await api.Voting(questionId, candidateId).then(
+      await api.voting(questionId, candidateId).then(
 
-      ).catch(e =>
-        console.log(e)
+      ).catch(
       )
       this.$store.commit('Voted/updateVote', { questionId, candidateId })
-      console.log(this.$store.state.Voted.list)
     }
   },
   validate ({ params }) {
