@@ -50,7 +50,7 @@ export default Vue.extend({
     }
   },
   beforeCreate () {
-    const token = this.$store.state.token.aToken
+    const token = this.$store.state.Token.aToken
     if (token === '') {
       this.$router.push('/login')
     }

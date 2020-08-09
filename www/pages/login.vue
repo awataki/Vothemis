@@ -2,6 +2,7 @@
   <v-container
     class="fill-height"
     fluid
+    @keyup.enter="login"
   >
     <v-row
       align="center"
@@ -34,6 +35,7 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
+            <span v-if="err" class="error pa-1" style="color: white; border-radius: 5px;">{{ errMsg }}</span>
             <v-spacer />
             <v-btn color="primary" @click="login">
               ログイン
@@ -53,16 +55,28 @@ export default Vue.extend({
   data () {
     return {
       userName: '',
-      password: ''
+      password: '',
+      err: false,
+      errMsg: ''
     }
   },
   methods: {
     async login () {
       const api = new LoginAPI()
-      const tokenPair = await api.login(this.userName, this.password).catch(e => console.log(e.response.status))
-      if (tokenPair !== undefined) {
-        this.$store.commit('Token/updateAccessToken', tokenPair.aToken)
-        await this.$router.push('/')
+      if (this.userName !== '' && this.password !== '') {
+        const tokenPair = await api.login(this.userName, this.password).catch(
+          (e:any) => {
+            this.err = true
+            switch (e.response.status) {
+              case 404:
+                this.errMsg = 'ユーザーまたはパスワードが間違っています'
+            }
+          }
+        )
+        if (tokenPair !== undefined) {
+          this.$store.commit('Token/updateAccessToken', tokenPair.aToken)
+          await this.$router.push('/')
+        }
       }
     }
   }
