@@ -53,7 +53,7 @@ import Vue from 'vue'
 export default Vue.extend({
   data () {
     return {
-      drawer: false,
+      drawer: true,
       items: [
         {
           icon: 'mdi-home',
