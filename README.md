@@ -53,3 +53,6 @@ vothemis {
 
 ## API Reference
 Please see `Vothemis.v1.yaml` with SwaggerUI
+
+## Author
+awataki (Yuga Iwata)
