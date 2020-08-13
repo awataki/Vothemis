@@ -1,5 +1,6 @@
 package sh.awtk.vothemis.presenter
 
+import sh.awtk.vothemis.dto.VotingDto
 import sh.awtk.vothemis.dto.toResponse
 import sh.awtk.vothemis.interfaces.service.IQuestionService
 import sh.awtk.vothemis.viewmodel.QuestionRequest
@@ -17,7 +18,7 @@ class QuestionPresenter(private val questionService: IQuestionService) {
         questionService.getQuestion(QuestionId(questionId)).toResponse()
 
     suspend fun votingQuestion(questionId: Long, userId: Long, candidateId: Long): Unit =
-        questionService.voting(QuestionId(questionId), UserId(userId), CandidateId(candidateId))
+        questionService.voting(VotingDto(QuestionId(questionId), UserId(userId), CandidateId(candidateId)))
 
     suspend fun updateSpecificQuestion(questionRequest: QuestionRequest, userId: Long): QuestionResponse =
         questionService.updateQuestionData(questionRequest.toDto(), UserId(userId)).toResponse()
