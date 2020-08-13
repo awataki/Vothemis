@@ -1,3 +1,3 @@
 package sh.awtk.vothemis.exception
 
-class BadRequestException(message: String) : HttpException(400, message)
+class BadRequestException(message: String, cMessage: String) : HttpException(400, message, cMessage)
