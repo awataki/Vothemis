@@ -103,11 +103,11 @@ private fun Application.installStatusPages() {
     install(StatusPages) {
         exception<HttpException> { e ->
             log.info(e.errMessage)
-            call.respond(HttpStatusCode.fromValue(e.code))
+            call.respond(HttpStatusCode.fromValue(e.code), e.errMessage)
         }
         exception<Throwable> { e ->
-            log.info(e.toString())
-            call.respond(HttpStatusCode.InternalServerError)
+            log.error(e.toString())
+            call.respond(HttpStatusCode.InternalServerError, "内部エラーが発生しました")
         }
     }
 }
