@@ -2,7 +2,7 @@ package sh.awtk.vothemis.exposed.repository
 
 import org.jetbrains.exposed.sql.deleteWhere
 import sh.awtk.vothemis.dto.CandidateDto
-import sh.awtk.vothemis.exception.ObjectNotFoundExcepiton
+import sh.awtk.vothemis.exception.ObjectNotFoundException
 import sh.awtk.vothemis.exposed.table.CandidateEntity
 import sh.awtk.vothemis.exposed.table.CandidateTable
 import sh.awtk.vothemis.exposed.table.QuestionEntity
@@ -22,7 +22,7 @@ class CandidateRepositoryImpl : ICandidateRepository {
         return candidates.map {
             CandidateEntity.new {
                 this.questionID = QuestionEntity.findById(questionId.value)
-                    ?: throw ObjectNotFoundExcepiton("fail to find Question $questionId")
+                    ?: throw ObjectNotFoundException("fail to find Question $questionId")
                 this.description = it.description.value
             }.toDto()
         }

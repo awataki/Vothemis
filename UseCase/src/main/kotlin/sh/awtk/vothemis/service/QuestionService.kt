@@ -5,7 +5,7 @@ import sh.awtk.vothemis.dto.VotingDto
 import sh.awtk.vothemis.dto.validate
 import sh.awtk.vothemis.exception.BadRequestException
 import sh.awtk.vothemis.exception.ForbiddenException
-import sh.awtk.vothemis.exception.ObjectNotFoundExcepiton
+import sh.awtk.vothemis.exception.ObjectNotFoundException
 import sh.awtk.vothemis.interfaces.repository.*
 import sh.awtk.vothemis.interfaces.service.IQuestionService
 import sh.awtk.vothemis.vo.QuestionId
@@ -23,7 +23,7 @@ class QuestionService(
         question.validate()
         return transaction.run {
             question.createdBy =
-                userRepo.findBy(userId) ?: throw ObjectNotFoundExcepiton("fail to find uer $userId")
+                userRepo.findBy(userId) ?: throw ObjectNotFoundException("fail to find uer $userId")
             questionRepo.create(question)
                 .also {
                     it.candidates = candidateRepo.replace(it.id, question.candidates)
@@ -33,13 +33,13 @@ class QuestionService(
 
     override suspend fun getQuestion(id: QuestionId): QuestionDto {
         return transaction.run {
-            questionRepo.findBy(id)?.addNumOfVote() ?: throw ObjectNotFoundExcepiton("fail to find question $id")
+            questionRepo.findBy(id)?.addNumOfVote() ?: throw ObjectNotFoundException("fail to find question $id")
         }
     }
 
     override suspend fun getAllQuestions(): List<QuestionDto> {
         return transaction.run {
-            questionRepo.findAll()?.map { it.addNumOfVote() } ?: throw ObjectNotFoundExcepiton("No question found")
+            questionRepo.findAll()?.map { it.addNumOfVote() } ?: throw ObjectNotFoundException("No question found")
         }
     }
 
@@ -62,7 +62,7 @@ class QuestionService(
             question.createdBy = prevQuestion.createdBy
             questionRepo.update(question)?.also {
                 it.candidates = candidateRepo.replace(it.id, question.candidates)
-            } ?: throw ObjectNotFoundExcepiton("fail to find question ${question.id}")
+            } ?: throw ObjectNotFoundException("fail to find question ${question.id}")
         }
     }
 
@@ -72,7 +72,7 @@ class QuestionService(
             if (prevQuestion?.createdBy?.id?.value != userId.value) throw ForbiddenException("User id not match")
             votingRepo.deleteBy(id)
             candidateRepo.deleteBy(id)
-            questionRepo.delete(id) ?: throw ObjectNotFoundExcepiton("fail to find question $id")
+            questionRepo.delete(id) ?: throw ObjectNotFoundException("fail to find question $id")
         }
     }
 

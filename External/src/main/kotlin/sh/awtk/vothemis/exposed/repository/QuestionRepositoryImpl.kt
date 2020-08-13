@@ -2,7 +2,7 @@ package sh.awtk.vothemis.exposed.repository
 
 import org.joda.time.DateTime
 import sh.awtk.vothemis.dto.QuestionDto
-import sh.awtk.vothemis.exception.ObjectNotFoundExcepiton
+import sh.awtk.vothemis.exception.ObjectNotFoundException
 import sh.awtk.vothemis.exposed.table.QuestionEntity
 import sh.awtk.vothemis.exposed.table.UserEntity
 import sh.awtk.vothemis.interfaces.repository.IQuestionRepository
@@ -14,7 +14,7 @@ class QuestionRepositoryImpl : IQuestionRepository {
         sentence = question.sentence.value
         until = DateTime(question.until)
         created_by = UserEntity.findById(question.createdBy!!.id.value)
-            ?: throw ObjectNotFoundExcepiton("fail to find created by user")
+            ?: throw ObjectNotFoundException("fail to find created by user")
     }.toDto()
 
     override fun findBy(Id: QuestionId): QuestionDto? = QuestionEntity.findById(Id.value)?.toDto()

@@ -3,7 +3,7 @@ package sh.awtk.vothemis.service
 import sh.awtk.vothemis.bcrypt.BCryptFactory
 import sh.awtk.vothemis.dto.UserDto
 import sh.awtk.vothemis.exception.AuthenticationException
-import sh.awtk.vothemis.exception.ObjectNotFoundExcepiton
+import sh.awtk.vothemis.exception.ObjectNotFoundException
 import sh.awtk.vothemis.interfaces.repository.ITransaction
 import sh.awtk.vothemis.interfaces.repository.IUserRepository
 import sh.awtk.vothemis.interfaces.service.IAuthenticationService
@@ -16,7 +16,7 @@ class AuthenticationService(
 ) : IAuthenticationService {
     override suspend fun login(user: UserDto): TokenPair {
         val loginUser = transaction.run {
-            userRepo.findBy(user.name) ?: throw ObjectNotFoundExcepiton("fail to find user ${user.id.value}")
+            userRepo.findBy(user.name) ?: throw ObjectNotFoundException("fail to find user ${user.id.value}")
         }
 
         if (!BCryptFactory.checkBCrypt(

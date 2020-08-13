@@ -3,7 +3,7 @@ package sh.awtk.vothemis.exposed.repository
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import sh.awtk.vothemis.dto.VotingDto
-import sh.awtk.vothemis.exception.ObjectNotFoundExcepiton
+import sh.awtk.vothemis.exception.ObjectNotFoundException
 import sh.awtk.vothemis.exposed.table.*
 import sh.awtk.vothemis.interfaces.repository.IVotingRepository
 import sh.awtk.vothemis.vo.CandidateId
@@ -20,11 +20,11 @@ class VotingRepositoryImpl : IVotingRepository {
         }
         VotingEntity.new {
             this.questionId = QuestionEntity.findById(votingDto.questionId.value)
-                ?: throw  ObjectNotFoundExcepiton("fail to find question $questionId")
+                ?: throw  ObjectNotFoundException("fail to find question $questionId")
             this.userId = UserEntity.findById(votingDto.userId.value)
-                ?: throw ObjectNotFoundExcepiton("fail to find user $userId")
+                ?: throw ObjectNotFoundException("fail to find user $userId")
             this.candidateId = CandidateEntity.findById(votingDto.candidateId.value)
-                ?: throw ObjectNotFoundExcepiton("fail to find candidate $candidateId")
+                ?: throw ObjectNotFoundException("fail to find candidate $candidateId")
         }
     }
 
