@@ -20,11 +20,11 @@ class VotingRepositoryImpl : IVotingRepository {
         }
         VotingEntity.new {
             this.questionId = QuestionEntity.findById(votingDto.questionId.value)
-                ?: throw  ObjectNotFoundException("fail to find question $questionId")
+                ?: throw  ObjectNotFoundException("fail to find question $questionId", "内部エラーが発生しました")
             this.userId = UserEntity.findById(votingDto.userId.value)
-                ?: throw ObjectNotFoundException("fail to find user $userId")
+                ?: throw ObjectNotFoundException("fail to find user $userId", "内部エラーが発生しました")
             this.candidateId = CandidateEntity.findById(votingDto.candidateId.value)
-                ?: throw ObjectNotFoundException("fail to find candidate $candidateId")
+                ?: throw ObjectNotFoundException("fail to find candidate $candidateId", "内部エラーが発生しました")
         }
     }
 

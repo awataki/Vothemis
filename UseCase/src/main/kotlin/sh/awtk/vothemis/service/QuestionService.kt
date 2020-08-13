@@ -23,7 +23,7 @@ class QuestionService(
         question.validate()
         return transaction.run {
             question.createdBy =
-                userRepo.findBy(userId) ?: throw ObjectNotFoundException("fail to find uer $userId")
+                userRepo.findBy(userId) ?: throw ObjectNotFoundException("fail to find uer $userId","ユーザー情報が見つかりません。")
             questionRepo.create(question)
                 .also {
                     it.candidates = candidateRepo.replace(it.id, question.candidates)
@@ -33,13 +33,13 @@ class QuestionService(
 
     override suspend fun getQuestion(id: QuestionId): QuestionDto {
         return transaction.run {
-            questionRepo.findBy(id)?.addNumOfVote() ?: throw ObjectNotFoundException("fail to find question $id")
+            questionRepo.findBy(id)?.addNumOfVote() ?: throw ObjectNotFoundException("fail to find question $id","設問がみつかりませんでした")
         }
     }
 
     override suspend fun getAllQuestions(): List<QuestionDto> {
         return transaction.run {
-            questionRepo.findAll()?.map { it.addNumOfVote() } ?: throw ObjectNotFoundException("No question found")
+            questionRepo.findAll()?.map { it.addNumOfVote() } ?: throw ObjectNotFoundException("No question found","設問がみつかりませんでした")
         }
     }
 
@@ -49,7 +49,7 @@ class QuestionService(
                     votingDto.questionId,
                     votingDto.candidateId
                 )
-            ) throw BadRequestException("wrong question id")
+            ) throw BadRequestException("wrong question id","不正なリクエストです")
             votingRepo.replace(votingDto)
         }
     }
@@ -58,21 +58,21 @@ class QuestionService(
         question.validate()
         return transaction.run {
             val prevQuestion = questionRepo.findBy(question.id)
-            if (prevQuestion?.createdBy?.id?.value != userId.value) throw ForbiddenException("User id not match")
+            if (prevQuestion?.createdBy?.id?.value != userId.value) throw ForbiddenException("User id not match","設問は作成者のみが編集できます")
             question.createdBy = prevQuestion.createdBy
             questionRepo.update(question)?.also {
                 it.candidates = candidateRepo.replace(it.id, question.candidates)
-            } ?: throw ObjectNotFoundException("fail to find question ${question.id}")
+            } ?: throw ObjectNotFoundException("fail to find question ${question.id}","設問がみつかりませんでした")
         }
     }
 
     override suspend fun deleteQuestion(id: QuestionId, userId: UserId) {
         return transaction.run {
             val prevQuestion = questionRepo.findBy(id)
-            if (prevQuestion?.createdBy?.id?.value != userId.value) throw ForbiddenException("User id not match")
+            if (prevQuestion?.createdBy?.id?.value != userId.value) throw ForbiddenException("User id not match","設問は作成者のみが削除できます")
             votingRepo.deleteBy(id)
             candidateRepo.deleteBy(id)
-            questionRepo.delete(id) ?: throw ObjectNotFoundException("fail to find question $id")
+            questionRepo.delete(id) ?: throw ObjectNotFoundException("fail to find question $id","設問がみつかりませんでした")
         }
     }
 

@@ -14,7 +14,7 @@ class QuestionRepositoryImpl : IQuestionRepository {
         sentence = question.sentence.value
         until = DateTime(question.until)
         created_by = UserEntity.findById(question.createdBy!!.id.value)
-            ?: throw ObjectNotFoundException("fail to find created by user")
+            ?: throw ObjectNotFoundException("fail to find created by user","内部エラーが発生しました")
     }.toDto()
 
     override fun findBy(Id: QuestionId): QuestionDto? = QuestionEntity.findById(Id.value)?.toDto()

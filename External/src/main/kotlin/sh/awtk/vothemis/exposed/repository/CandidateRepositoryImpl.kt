@@ -22,7 +22,7 @@ class CandidateRepositoryImpl : ICandidateRepository {
         return candidates.map {
             CandidateEntity.new {
                 this.questionID = QuestionEntity.findById(questionId.value)
-                    ?: throw ObjectNotFoundException("fail to find Question $questionId")
+                    ?: throw ObjectNotFoundException("fail to find Question $questionId","内部エラーが発生しました。")
                 this.description = it.description.value
             }.toDto()
         }

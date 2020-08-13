@@ -16,14 +16,14 @@ class AuthenticationService(
 ) : IAuthenticationService {
     override suspend fun login(user: UserDto): TokenPair {
         val loginUser = transaction.run {
-            userRepo.findBy(user.name) ?: throw ObjectNotFoundException("fail to find user ${user.id.value}")
+            userRepo.findBy(user.name) ?: throw ObjectNotFoundException("fail to find user ${user.id.value}","ユーザー名またはパスワードが間違っています")
         }
 
         if (!BCryptFactory.checkBCrypt(
                 user.password.value,
                 loginUser.password.value
             )
-        ) throw AuthenticationException("password not match")
+        ) throw AuthenticationException("password not match","ユーザー名またはパスワードが間違っています")
 
         return TokenPair(
             access_token = JWTFactory.newToken(loginUser.id.value),

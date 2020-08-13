@@ -44,7 +44,7 @@ private fun Route.questionRoute() {
     // Create new question
     post("/question") {
         val body = call.receive<QuestionRequest>()
-        val tokenId = call.principal<LoginUser>()?.id ?: throw AuthenticationException("invalid token")
+        val tokenId = call.principal<LoginUser>()?.id ?: throw AuthenticationException("invalid token","不正なトークンです")
         call.respond(questionPresenter.createNewQuestion(body, tokenId))
     }
 
@@ -56,20 +56,20 @@ private fun Route.questionRoute() {
     // Update specific question by ID
     put<SpecificQuestionLocation> {
         val body = call.receive<QuestionRequest>()
-        val tokenId = call.principal<LoginUser>()?.id ?: throw AuthenticationException("invalid token")
+        val tokenId = call.principal<LoginUser>()?.id ?: throw AuthenticationException("invalid token","不正なトークンです")
         call.respond(questionPresenter.updateSpecificQuestion(body, tokenId))
     }
 
     // Delete specific question by ID
     delete<SpecificQuestionLocation> { param ->
-        val tokenId = call.principal<LoginUser>()?.id ?: throw AuthenticationException("invalid token")
+        val tokenId = call.principal<LoginUser>()?.id ?: throw AuthenticationException("invalid token","不正なトークンです")
         call.respond(questionPresenter.deleteSpecificQuestion(param.id, tokenId))
     }
 
     // Voting to question
     post<SpecificQuestionLocation> { param ->
         val body = call.receive<VotingRequest>()
-        val tokenId = call.principal<LoginUser>()?.id ?: throw AuthenticationException("invalid token")
+        val tokenId = call.principal<LoginUser>()?.id ?: throw AuthenticationException("invalid token","不正なトークンです")
         call.respond(questionPresenter.votingQuestion(param.id, tokenId, body.candidate_id))
     }
 
@@ -104,7 +104,7 @@ private fun Route.userRoute() {
     put<SpecificUserLocation> { param ->
         val body = call.receive<UserRequest>()
         val tokenId = call.principal<LoginUser>()?.id
-        if (tokenId != param.id) throw ForbiddenException("invalid user request")
+        if (tokenId != param.id) throw ForbiddenException("invalid user request","許可されていない操作です")
 
         call.respond(userPresenter.updateUserData(param.id, body))
     }

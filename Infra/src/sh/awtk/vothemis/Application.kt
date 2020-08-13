@@ -103,7 +103,7 @@ private fun Application.installStatusPages() {
     install(StatusPages) {
         exception<HttpException> { e ->
             log.info(e.errMessage)
-            call.respond(HttpStatusCode.fromValue(e.code), e.errMessage)
+            call.respond(HttpStatusCode.fromValue(e.code), e.clientMessage)
         }
         exception<Throwable> { e ->
             log.error(e.toString())
