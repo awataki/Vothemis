@@ -14,7 +14,7 @@ import sh.awtk.vothemis.vo.QuestionTitle
 object QuestionTable : LongIdTable("Questions") {
     var title: Column<String> = varchar("title", 256)
     var sentence: Column<String> = varchar("sentence", 256)
-    var until: Column<DateTime> = date("until")
+    var until: Column<DateTime> = datetime("until")
     var createdBy: Column<EntityID<Long>> = reference("created_by", UserTable)
 }
 
