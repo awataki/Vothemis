@@ -31,8 +31,8 @@ export default {
     ]
   },
   manifest: {
-    name: 'Vothemis Voring',
-    short_name: 'Votemis',
+    name: 'Vothemis Voting',
+    short_name: 'Vothemis',
     title: 'Vothemis Voting',
     'og:title': 'Vothemis Voting',
     description: '投票ツール',
@@ -91,19 +91,19 @@ export default {
     theme: {
       dark: false,
       themes: {
-        dark: {
-          primary: colors.grey.base,
+        light: {
+          primary: colors.grey.darken4,
+          secondary: colors.grey.darken4,
           accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.red.base,
           success: colors.green.accent3
         },
-        light: {
-          primary: colors.grey.base,
+        dark: {
+          primary: colors.blueGrey.base,
+          secondary: colors.green.darken1,
           accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.red.base,

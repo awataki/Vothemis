@@ -7,7 +7,7 @@
       {{ subtitle }}
     </v-card-subtitle>
     <v-card-actions>
-      <v-btn class="ma-2" :to="link" nuxt>
+      <v-btn class="ma-2" :to="link" nuxt color="primary">
         {{ btn }}
       </v-btn>
     </v-card-actions>
@@ -16,8 +16,6 @@
 
 <style lang="scss" scoped>
 .v-btn {
-  color: white !important;
-  background-color: #212121 !important;
   min-width: 95px !important;
 }
 </style>

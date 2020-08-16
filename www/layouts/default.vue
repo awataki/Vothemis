@@ -5,6 +5,7 @@
       clipped
       app
       width="220px"
+      overlay-color="primary"
     >
       <v-list class="py-0">
         <v-list-item

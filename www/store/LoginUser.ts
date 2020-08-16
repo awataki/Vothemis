@@ -1,7 +1,7 @@
 import User from '~/assets/scripts/model/User'
 
 export const state = () => (
-  new User(0, '', '')
+  new User(0, '', '', '')
 )
 
 export const mutations = {

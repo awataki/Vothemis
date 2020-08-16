@@ -10,10 +10,12 @@
       <v-col
         cols="12"
         md="8"
+        lg="6"
+        xl="4"
       >
         <v-card class="elevation-5 pa-4">
+          <v-card-title>{{ detail.sentence }}</v-card-title>
           <v-card-text>
-            <h1>{{ detail.sentence }}</h1>
             <v-form>
               <v-radio-group v-model="vote" :mandatory="false">
                 <v-row>

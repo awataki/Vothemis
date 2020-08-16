@@ -1,9 +1,15 @@
 <template>
   <v-container fluid style="height: 100%;" class="ma-0 py-0">
     <v-row justify="center" align="center" style="height: 100%;">
-      <v-col cols="12" class="ma-0 py-0">
+      <v-col cols="12" xl="8" class="ma-0 py-0">
         <v-row align="center" justify="center">
-          <v-col v-for="card in cards" :key="card.title" div cols="12" class="my-2">
+          <v-col
+            v-for="card in cards"
+            :key="card.title"
+            cols="12"
+            md="7"
+            class="my-2"
+          >
             <welcome-card
               :title="card.title"
               :subtitle="card.subtitle"

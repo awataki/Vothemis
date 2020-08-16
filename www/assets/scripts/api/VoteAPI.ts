@@ -45,6 +45,7 @@ export default class VoteAPI extends BaseAPI {
       new User(
         +json.created_by.id,
         json.created_by.name,
+        '',
         json.created_by.bio
       )
     )
