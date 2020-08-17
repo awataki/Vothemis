@@ -1,7 +1,10 @@
 import User from '~/assets/scripts/model/User'
 
-export const state = () => (
-  new User(0, '', '', '')
+export const state = () => ({
+  id: 0,
+  name: '',
+  bio: ''
+}
 )
 
 export const mutations = {

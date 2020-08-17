@@ -1,23 +1,25 @@
 <template>
-  <v-container fill-height>
-    <v-col style="height: 100%;">
-      <v-data-table
-        :headers="headers"
-        item-key="id"
-        :items="votes"
-        :page.sync="page"
-        :items-per-page="15"
-        hide-default-footer
-        :loading="loading"
-        loading-text="Loading... Please wait"
-        class="elevation-1 "
-        @page-count="pageCount = $event"
-        @click:row="onClickRow"
-      />
-      <div class="text-center pt-2">
-        <v-pagination v-model="page" :length="pageCount" />
-      </div>
-    </v-col>
+  <v-container>
+    <v-row justify="center" align="start">
+      <v-col cols="12" md="8">
+        <v-data-table
+          :headers="headers"
+          item-key="id"
+          :items="votes"
+          :page.sync="page"
+          :items-per-page="15"
+          hide-default-footer
+          :loading="loading"
+          loading-text="Loading... Please wait"
+          class="elevation-1 "
+          @page-count="pageCount = $event"
+          @click:row="onClickRow"
+        />
+        <div class="text-center pt-2">
+          <v-pagination v-model="page" :length="pageCount" />
+        </div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
