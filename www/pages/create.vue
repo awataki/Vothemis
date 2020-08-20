@@ -98,7 +98,7 @@
             <span v-if="err" class="error pa-1" style="color: white; border-radius: 5px;">{{ errMsg }}</span>
             <v-spacer />
             <v-btn color="primary" @click="onSubmit">
-              ログイン
+              作成
             </v-btn>
           </v-card-actions>
         </v-card>
