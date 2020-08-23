@@ -1,6 +1,5 @@
-version: '2'
+version: '3'
 services:
-
   # SQL database
   postgres:
     image: "postgres:9.6.0"
@@ -13,7 +12,28 @@ services:
       POSTGRES_USER: "testuser"
       POSTGRES_PASSWORD: "testuser"
       POSTGRES_DB: "vothemis"
-    mem_limit: "8g"
+
+  flyway:
+    image: "flyway/flyway:6"
+    user: "${UID}:${GID}"
+    volumes:
+      - ./flyway/sql:/flyway/sql
+      - ./flyway/conf:/flyway/conf
+    links:
+      - postgres
+    command: migrate
+
+  vothemis:
+    image: "gradle:jdk11"
+    user: "${UID}:${GID}"
+    volumes:
+      - ./:/home/gradle/vothemis
+    depends_on:
+      - postgres
+    ports:
+      - "9841:9841"
+    working_dir: /home/gradle/vothemis
+    command: gradle run
 
 volumes:
   vothemis-data:
