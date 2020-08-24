@@ -31,15 +31,25 @@ export default class Candidate {
     this._numOfVote = value
   }
 
+  get percentage (): Number {
+    return this._percentage
+  }
+
+  set percentage (value: Number) {
+    this._percentage = value
+  }
+
   private _candidateId!:Number
   private _questionId!:Number
   private _description!:String
   private _numOfVote:Number = 0
+  private _percentage:Number = 0
 
-  constructor (candidateId:Number, questionId:Number, description:String, numOfVote:Number) {
+  constructor (candidateId:Number, questionId:Number, description:String, numOfVote:Number, percentage:Number) {
     this.candidateId = candidateId
     this.questionId = questionId
     this.description = description
     this.numOfVote = numOfVote
+    this.percentage = percentage
   }
 }

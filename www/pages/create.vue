@@ -137,7 +137,7 @@ export default Vue.extend({
         0,
         this.title,
         this.sentence,
-        candidateArray.map(it => new Candidate(0, 0, it, 0)),
+        candidateArray.map(it => new Candidate(0, 0, it, 0, 0)),
         new Date(this.date + 'T' + this.time),
         this.$store.state.LoginUser
       )

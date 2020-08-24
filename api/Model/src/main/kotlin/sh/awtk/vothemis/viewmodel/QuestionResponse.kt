@@ -8,5 +8,6 @@ data class QuestionResponse(
     val sentence: String,
     val available_candidate: List<Candidate>,
     val until: Date,
+    val total: Long,
     val created_by: UserResponse
 )

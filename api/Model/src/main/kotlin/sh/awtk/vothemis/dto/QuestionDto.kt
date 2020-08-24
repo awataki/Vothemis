@@ -23,13 +23,20 @@ fun QuestionDto.toResponse(): QuestionResponse = QuestionResponse(
     sentence.value,
     candidates.map { it.toViewModel() },
     until,
+    candidates.map { it.numOfVote.value }.sum(),
     createdBy!!.toResponse()
 )
 
 fun QuestionDto.validate(): QuestionDto {
     if (this.title.value.isBlank()) throw BadRequestException("QuestionDto.title is empty", "タイトルが不正です")
     if (this.sentence.value.isBlank()) throw BadRequestException("QuestionDto.sentence is empty", "質問文が不正です")
-    if (this.candidates.isNullOrEmpty()) throw BadRequestException("QuestionDto.candidates is empty", "候補は１つ以上でなければなりません")
-    if (this.until < DateTime.now().toDate()) throw BadRequestException("QuestionDto.until out dated", "締切は未来でなければなりません")
+    if (this.candidates.isNullOrEmpty()) throw BadRequestException(
+        "QuestionDto.candidates is empty",
+        "候補は１つ以上でなければなりません"
+    )
+    if (this.until < DateTime.now().toDate()) throw BadRequestException(
+        "QuestionDto.until out dated",
+        "締切は未来でなければなりません"
+    )
     return this
 }

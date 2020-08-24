@@ -34,7 +34,9 @@ export default class VoteAPI extends BaseAPI {
         +c.candidate_id,
         +c.question_id,
         c.description,
-        +c.num_of_vote)
+        +c.num_of_vote,
+        (+c.num_of_vote / +json.total) * 100
+      )
     )
     return new Vote(
       +json.id,

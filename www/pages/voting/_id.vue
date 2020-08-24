@@ -1,8 +1,10 @@
 <template>
   <v-container
-    class="fill-height"
     fluid
   >
+    <v-row>
+      <v-btn icon class="mx-3" />
+    </v-row>
     <v-row
       align="start"
       justify="center"
@@ -19,14 +21,14 @@
             <v-form>
               <v-radio-group v-model="vote" :mandatory="false">
                 <v-row>
-                  <Candidate v-for="i in detail.availableCandidate" :key="i.candidateId" :candidate="i" />
+                  <Candidate v-for="i in detail.availableCandidate" :key="i.candidateId" :candidate="i" :voted="voted" />
                 </v-row>
               </v-radio-group>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn color="primary" @click="voting">
+            <v-btn :disabled="voted" color="primary" @click="voting">
               投票
             </v-btn>
           </v-card-actions>
@@ -50,22 +52,32 @@ export default Vue.extend({
   },
   data () {
     return {
-      vote: 0
+      vote: 0,
+      voted: false,
+      progress: false,
+      detail: {}
     }
   },
   mounted () {
-    this.vote = this.$store.state.Voted.list[this.$route.params.id.toString()]
+    this.vote = this.$store.state.Voted.voted[this.$route.params.id.toString()]
+    if (this.vote !== undefined) {
+      this.voted = true
+    }
   },
   methods: {
     async voting () {
+      this.progress = true
       const questionId:Number = +this.$route.params.id
       const candidateId:Number = this.vote
+
       const api = new VoteAPI(this.$store.state.Token.aToken)
       await api.voting(questionId, candidateId).then(
-
       ).catch(
       )
       this.$store.commit('Voted/updateVote', { questionId, candidateId })
+
+      this.detail = await api.findBy(+this.$route.params.id)
+      this.voted = true
     }
   },
   validate ({ params }) {
