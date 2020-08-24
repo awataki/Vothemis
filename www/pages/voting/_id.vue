@@ -1,9 +1,15 @@
 <template>
   <v-container
+    class=" py-0"
     fluid
   >
     <v-row>
-      <v-btn icon class="mx-3" />
+      <v-toolbar class="elevation-1 mb-6">
+        <v-btn icon class="mx-3" @click="$router.back()">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
+        <h3>{{ detail.title }}</h3>
+      </v-toolbar>
     </v-row>
     <v-row
       align="start"
@@ -21,14 +27,14 @@
             <v-form>
               <v-radio-group v-model="vote" :mandatory="false">
                 <v-row>
-                  <Candidate v-for="i in detail.availableCandidate" :key="i.candidateId" :candidate="i" :voted=" voted || detail.createdBy.id === $store.state.LoginUser.id" />
+                  <Candidate v-for="i in detail.availableCandidate" :key="i.candidateId" :candidate="i" :voted=" voted||isOwner" />
                 </v-row>
               </v-radio-group>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn :disabled="voted || detail.createdBy.id === $store.state.LoginUser.id" color="primary" @click="voting">
+            <v-btn :disabled="voted||isOwner" color="primary" @click="voting">
               投票
             </v-btn>
           </v-card-actions>
@@ -48,9 +54,13 @@ export default Vue.extend({
     Candidate: () => import('~/components/Candidate.vue')
   },
   async asyncData ({ store, params }) {
-    const api = new VoteAPI(store.state.Token.aToken)
-    const res = await api.findBy(+params.id)
-    return { detail: res }
+    try {
+      const api = new VoteAPI(store.state.Token.aToken)
+      const res = await api.findBy(+params.id)
+      return { detail: res }
+    } catch (e) {
+      console.log(e.body)
+    }
   },
   data () {
     return {
@@ -58,6 +68,12 @@ export default Vue.extend({
       voted: false,
       progress: false,
       detail: new Vote(0, '', '', [], new Date(), new User(0, '', '', ''))
+    }
+  },
+  computed: {
+    isOwner () {
+      // @ts-ignore
+      return this.detail.createdBy.id === this.$store.state.LoginUser.id
     }
   },
   mounted () {
