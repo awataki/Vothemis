@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer
+      v-if="isLogin"
       v-model="drawer"
       clipped
       app
@@ -38,13 +39,13 @@
       <v-menu offset-y :close-on-content-click="false">
         <template v-slot:activator="{attr,on}">
           <v-avatar size="40" color="primary" v-bind="attr" v-on="on">
-            <span>{{ avatarText }}</span>
+            {{ avatarText }}
           </v-avatar>
         </template>
         <v-list>
           <v-list-item @click="$router.push('/profile')">
             <v-list-item-avatar>
-              <v-avatar size="40" color="primary" style="color: white;" v-bind="attr" v-on="on">
+              <v-avatar size="40" color="primary" style="color: white;">
                 <span>{{ avatarText }}</span>
               </v-avatar>
             </v-list-item-avatar>
@@ -130,6 +131,9 @@ export default Vue.extend({
     },
     user () {
       return this.$store.state.LoginUser
+    },
+    isLogin () {
+      return this.$store.state.LoginUser.id !== 0
     }
   },
   methods: {
