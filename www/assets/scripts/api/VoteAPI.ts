@@ -35,7 +35,7 @@ export default class VoteAPI extends BaseAPI {
         +c.question_id,
         c.description,
         +c.num_of_vote,
-        (+c.num_of_vote / +json.total) * 100
+        isNaN((+c.num_of_vote / +json.total) * 100) ? 0 : (+c.num_of_vote / +json.total) * 100
       )
     )
     return new Vote(

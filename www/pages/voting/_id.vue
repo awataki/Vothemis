@@ -21,14 +21,14 @@
             <v-form>
               <v-radio-group v-model="vote" :mandatory="false">
                 <v-row>
-                  <Candidate v-for="i in detail.availableCandidate" :key="i.candidateId" :candidate="i" :voted="voted" />
+                  <Candidate v-for="i in detail.availableCandidate" :key="i.candidateId" :candidate="i" :voted=" voted || detail.createdBy.id === $store.state.LoginUser.id" />
                 </v-row>
               </v-radio-group>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn :disabled="voted" color="primary" @click="voting">
+            <v-btn :disabled="voted || detail.createdBy.id === $store.state.LoginUser.id" color="primary" @click="voting">
               投票
             </v-btn>
           </v-card-actions>
@@ -40,6 +40,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import VoteAPI from '~/assets/scripts/api/VoteAPI'
+import Vote from '~/assets/scripts/model/Vote'
+import User from '~/assets/scripts/model/User'
 
 export default Vue.extend({
   components: {
@@ -55,12 +57,12 @@ export default Vue.extend({
       vote: 0,
       voted: false,
       progress: false,
-      detail: {}
+      detail: new Vote(0, '', '', [], new Date(), new User(0, '', '', ''))
     }
   },
   mounted () {
     this.vote = this.$store.state.Voted.voted[this.$route.params.id.toString()]
-    if (this.vote !== undefined) {
+    if (this.vote != null) {
       this.voted = true
     }
   },

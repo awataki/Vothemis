@@ -125,7 +125,11 @@ export default Vue.extend({
       return this.$store.state.LoginUser
     },
     votes () {
-      return this.$store.state.Votes.list
+      if (this.$store.state.Votes.list[0].createdBy != null) {
+        return this.$store.state.Votes.list.filter((it:Vote) => this.user.id === it.createdBy.id)
+      } else {
+        return undefined
+      }
     }
   },
   created () {

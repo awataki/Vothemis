@@ -130,21 +130,24 @@ export default Vue.extend({
     }
   },
   methods: {
-    onSubmit () {
-      const candidateArray = this.candidates.map(it => it.title)
-      const api = new VoteAPI(this.$store.state.Token.aToken)
-      const vote = new Vote(
-        0,
-        this.title,
-        this.sentence,
-        candidateArray.map(it => new Candidate(0, 0, it, 0, 0)),
-        new Date(this.date + 'T' + this.time),
-        this.$store.state.LoginUser
-      )
-      api.create(vote).catch((e) => {
+    async onSubmit () {
+      try {
+        const candidateArray = this.candidates.map(it => it.title)
+        const api = new VoteAPI(this.$store.state.Token.aToken)
+        const vote = new Vote(
+          0,
+          this.title,
+          this.sentence,
+          candidateArray.map(it => new Candidate(0, 0, it, 0, 0)),
+          new Date(this.date + 'T' + this.time),
+          this.$store.state.LoginUser
+        )
+        await api.create(vote)
+        await this.$router.push('/voting')
+      } catch (e) {
         this.err = true
         this.errMsg = e.response.data
-      })
+      }
     },
     incrementCandidate () {
       this.candidates.push({ title: '' })
