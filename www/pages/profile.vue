@@ -125,7 +125,7 @@ export default Vue.extend({
       return this.$store.state.LoginUser
     },
     votes () {
-      if (this.$store.state.Votes.list[0].createdBy != null) {
+      if (this.$store.state.Votes.list[0] != null && this.$store.state.Votes.list[0].createdBy != null) {
         return this.$store.state.Votes.list.filter((it:Vote) => this.user.id === it.createdBy.id)
       } else {
         return undefined
